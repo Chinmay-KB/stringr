@@ -48,7 +48,7 @@ return Scaffold(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times ew32'.camelCase(),
+              'HTML have pushed the button this many times ew32'.camelCase(preserveAcronym: true),
             ),
             Text(
               '$_counter',

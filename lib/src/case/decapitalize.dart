@@ -1,5 +1,3 @@
-extension Decapitalize on String{
-  String decapitalize(){
-    final varString=
-  }
+extension Decapitalize on String {
+  String decapitalize() {}
 }

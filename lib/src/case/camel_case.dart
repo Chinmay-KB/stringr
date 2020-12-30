@@ -1,23 +1,22 @@
 import '../util/strings/force_strings.dart';
+import '../util/strings/all_caps.dart';
 import './capitalize.dart';
 import '../split/words.dart';
 
 extension CamelCase on String {
-  String camelCase() {
+  String camelCase({bool preserveAcronym = false}) {
     final valString = this.forceToString();
     String camelCaseString = "";
     List<String> wordList = valString.words();
-    wordList.asMap().forEach((index, word) {
-      camelCaseString += index == 0
-          ? word.toLowerCase()
-          : word.capitalize(capitalizeAll: false);
-    });
-    // for (int index = 0; index < wordList.length; index++) {
-    //   camelCaseString += wordToCamel(wordList[index], index);
-    // }
+    wordList.asMap().forEach(
+      (index, word) {
+        camelCaseString += index == 0
+            ? (preserveAcronym)
+                ? (word.allCaps() ? word : word.toLowerCase())
+                : word.toLowerCase()
+            : word.capitalize(capitalizeAll: false);
+      },
+    );
     return camelCaseString;
   }
 }
-
-// String wordToCamel(String word, int index) =>
-//     index == 0 ? word.toLowerCase() : word.capitalize(capitalizeAll: false);
