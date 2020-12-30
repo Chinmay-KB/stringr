@@ -9,7 +9,6 @@ void main() {
         "camelCaseIsACaseClosedInACamel");
     expect("this is HTML class".camelCase(), "thisIsHTMLClass");
     expect("HTML view".camelCase(preserveAcronym: true), "HTMLView");
-    expect(null.camelCase(), "");
     expect("21 jump street".camelCase(), "21JumpStreet");
     expect("42".camelCase(), "42");
   });

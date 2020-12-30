@@ -37,9 +37,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
+    return Scaffold(
       appBar: AppBar(
-      title: Text(widget.title),
+        title: Text(widget.title),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -48,7 +48,8 @@ return Scaffold(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'HTML have pushed the button this many times ew32'.camelCase(preserveAcronym: true),
+              'HTML have pushed the button this many times ew32'
+                  .camelCase(preserveAcronym: true),
             ),
             Text(
               '$_counter',

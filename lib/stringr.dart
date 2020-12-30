@@ -1,4 +1,4 @@
 library stringr;
 
-export 'src/case/camel_case.dart';
+export 'src/case/case.dart';
 

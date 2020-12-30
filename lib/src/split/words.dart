@@ -1,8 +1,7 @@
-import '../util/strings/force_strings.dart';
-
+///Extension function bundling all functionalities related to splitting a string
 extension Words on String {
-  List<String> words({String regex = " "}) {
-    final valString = this.forceToString();
-    return valString.split(RegExp(regex));
-  }
+  ///Split a string according to a given pattern/regex. Splits on [" "] by
+  ///default. To split according to a regex, pass the regex pattern string to
+  ///[regex] parameter
+  List<String> words({String regex = " "}) => this.split(RegExp(regex));
 }
