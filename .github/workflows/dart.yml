@@ -42,9 +42,9 @@ jobs:
       - name: Exclude /lib/src/util from coverage report
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
-          path: ./coverage/lcov.info
+          path: "./coverage/lcov.info"
           min_coverage: 0
-          exclude: lib/src/util
+          exclude: "lib/src/util"
       - uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}} #required
