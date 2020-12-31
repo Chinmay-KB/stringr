@@ -2,8 +2,7 @@ import '../util/strings/strings.dart';
 import '../util/object/extended_iterable.dart';
 import '../split/words.dart';
 
-/// Extension function bundling all functionalities related to case manipulation
-/// [camelCase()]
+/// Extension bundling all functionalities related to case manipulation
 extension Case on String {
   ///Changes a string into camelCase
   ///
