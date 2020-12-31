@@ -1,0 +1,2 @@
+ignore:
+  - "lib/src/util"  # ignore folders and all its contents
