@@ -22,6 +22,7 @@ void main() {
     expect("42 is life".capitalize(), "42 is life");
     expect("42 is life".capitalize(capitalizeAll: true), "42 IS LIFE");
     expect("excuse moi".capitalize(capitalizeAll: true), "EXCUSE MOI");
+    expect("".capitalize(), "");
   });
 
   test(
@@ -33,6 +34,7 @@ void main() {
     expect("42 is life".decapitalize(), "42 is life");
     expect("42 IS LIFE".decapitalize(decapitalizeAll: true), "42 is life");
     expect("EXCUSE MOI".decapitalize(decapitalizeAll: true), "excuse moi");
+    expect("".decapitalize(), "");
   });
 
   test("the provided string should be converted to kebab-case", () {
