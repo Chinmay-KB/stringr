@@ -5,6 +5,9 @@ This dart plugin is null safety compliant 😎😎
 
 ![codecov](https://codecov.io/gh/Chinmay-KB/stringr/branch/master/graph/badge.svg?token=UIWY4OF2TE)
 ![codemagic](https://api.codemagic.io/apps/5fecda726b96ea001cebef4a/flutter-package/status_badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+
 
 This dart plugin is inspired by [Voca js](https://vocajs.com/#) library. This plugin includes all the nifty functions required for powerful string manipulations. 
 How powerful? Good you asked!!
