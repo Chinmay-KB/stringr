@@ -80,13 +80,13 @@ final REGEXP_TRIM_RIGHT = new RegExp('[' + whitespace + ']+\$');
 final REGEXP_DIGIT = new RegExp('^' + digit + '+\$');
 
 /// Regular expression to match regular expression special characters
-final REGEXP_SPECIAL_CHARACTERS = "/[-[\]{}()*+!<=:?./\\^\$|#,]/g";
+final REGEXP_SPECIAL_CHARACTERS = RegExp(r"[-[\]{}()*+!<=:?./\\^\$|#,]");
 
 /// Regular expression to match not latin characters
 final REGEXP_NON_LATIN = "/[^A-Za-z0-9]/g";
 
 /// Regular expression to match HTML special characters.
-final REGEXP_HTML_SPECIAL_CHARACTERS = "/[<>&\"'`]/g";
+final REGEXP_HTML_SPECIAL_CHARACTERS = RegExp(r'[<>&"'"'"'`]');
 
 /// Regular expression to match sprintf format string
 final REGEXP_CONVERSION_SPECIFICATION =
@@ -102,3 +102,4 @@ final REGEXP_FLAGS = "/[gimuy]*\$/";
 ///
 /// @see https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-name
 final REGEXP_TAG_LIST = "/<([A-Za-z0-9]+)>/g";
+
