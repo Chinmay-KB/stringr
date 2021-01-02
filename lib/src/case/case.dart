@@ -30,10 +30,7 @@ extension Case on String {
     if (capitalizeAll) {
       return this.upperCase();
     } else {
-      if (this.length == 0)
-        return this.upperCase();
-      else
-        return this[0].upperCase() + this.substring(1);
+      return this.length == 0 ? "" : this[0].upperCase() + this.substring(1);
     }
   }
 
@@ -45,10 +42,7 @@ extension Case on String {
     if (decapitalizeAll) {
       return this.lowerCase();
     } else {
-      if (this.length == 0)
-        return this.lowerCase();
-      else
-        return this[0].lowerCase() + this.substring(1);
+        return this.length==0?"":this[0].lowerCase() + this.substring(1);
     }
   }
 
