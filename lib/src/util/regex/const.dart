@@ -83,7 +83,7 @@ final REGEXP_DIGIT = new RegExp('^' + digit + '+\$');
 final REGEXP_SPECIAL_CHARACTERS = RegExp(r"[-[\]{}()*+!<=:?./\\^\$|#,]");
 
 /// Regular expression to match not latin characters
-final REGEXP_NON_LATIN = "/[^A-Za-z0-9]/g";
+final REGEXP_NON_LATIN = "[^A-Za-z0-9]";
 
 /// Regular expression to match HTML special characters.
 final REGEXP_HTML_SPECIAL_CHARACTERS = RegExp(r'[<>&"'"'"'`]');

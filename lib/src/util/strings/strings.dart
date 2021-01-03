@@ -11,12 +11,3 @@ extension Strings on String {
   ///Checks whether the string is all aplhabets
   bool isAlphabet() => REGEXP_ALPHA.hasMatch(this);
 }
-
-// String forceToString({String defaultValue = ""}) {
-//   if (this == null)
-//     return defaultValue;
-//   else if (this.isEmpty)
-//     return defaultValue;
-//   else
-//     return this;
-// }
