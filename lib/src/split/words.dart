@@ -1,4 +1,5 @@
 import '../util/regex/const_regex.dart';
+import 'package:characters/characters.dart';
 
 /// Extension function bundling all functionalities related to splitting a string
 extension Words on String {
@@ -18,4 +19,13 @@ extension Words on String {
         .map((e) => e.group(0))
         .toList();
   }
+
+  /// Splits a string into list of single characters
+  List<String?> chars() => this.split('');
+
+  /// Returns an array of unicode code point values
+  List<int?> codePoints() => this.codeUnits;
+
+  /// Returns an array of graphemes of the string
+  List<String?> graphemes() => this.characters.toList();
 }

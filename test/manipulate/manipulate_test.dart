@@ -48,4 +48,9 @@ void main() {
         'float like a butterfly');
     expect('make the days count'.splice(19, -100, 'matter'), 'matter');
   });
+
+  test("shoudl translate a string according to translations provided", () {
+    expect("help".translate({"elp": "ola"}), "hola");
+    expect("I am groot".translate({"I": "Me", "groot": "Yoda"}), "Me am Yoda");
+  });
 }

@@ -9,7 +9,6 @@ void main() {
   });
 
   test('should return escaped regex', () {
-    expect(r'-[]/{}()*+?.\\^$|', r'-[]/{}()*+?.\\^$|');
     expect('500-200'.escapeRegExp(), r"500\\-200");
   });
 }

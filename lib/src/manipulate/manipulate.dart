@@ -37,4 +37,34 @@ extension Manipulate on String {
         replacement +
         this.slice(startPosition + deleteCount);
   }
+
+  /// Translate a string by replacing a given substring with another substring
+  ///
+  /// Provide translations as a `Map<String, String>` to [translations]
+  /// Example
+  /// ```dart
+  /// void main(){
+  /// print("Hello world".translate({"ell":"ipp"}));
+  /// // Output - "Hippo World"
+  /// }
+  /// ```
+  String translate(Map<String, String> translations) {
+    String translated = this;
+    translations.forEach(
+      (key, value) {
+        translated = translated.replaceAll(key, value);
+      },
+    );
+    return translated;
+  }
+
+  // / Wraps a string to a given number of characters using a string break 
+  // / character
+  // / 
+  // / [width] is the number of characters to wrap at. [newLine] is the string 
+  // / added at the end of a line. [indent] is the string used to indent the line.
+  // / When [cut] is `false`(default), it does not split the word even if the 
+  // / word length is bigger than `width`. When `true`, words having bigger 
+  // / length than `width` are broken.
+  
 }

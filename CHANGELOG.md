@@ -1,3 +1,5 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.1] - 04/01/2021
 
-* TODO: Describe initial release.
+* Added functionalities either missing from String class.
+* Functionalities are inspired from Voca JS.
+* escapeRegEx() is not working for certain RegEx strings.

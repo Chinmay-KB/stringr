@@ -40,6 +40,6 @@ void main() {
     expect("reality can be whatever I want".kebabCase().countWords(), 6);
     expect("NewDelhi".countWords(), 2);
     expect("clasificación biológica".countWords(), 2);
-    //expect("123456".countWords(pattern: "/\d/g"), 6);
+    expect("123456".countWords(pattern: r"\d"), 6);
   });
 }
