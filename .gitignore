@@ -10,6 +10,8 @@
 .svn/
 .metadata
 
+coverage/
+
 # IntelliJ related
 *.iml
 *.ipr
