@@ -11,4 +11,8 @@ void main() {
   test('should return escaped regex', () {
     expect('500-200'.escapeRegExp(), r"500\\-200");
   });
+
+  test('should return un-escaped regex', () {
+    expect(r"500\\-200".unEscapeRegExp(), '500-200');
+  });
 }

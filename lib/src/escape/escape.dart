@@ -18,12 +18,16 @@ extension Escape on String {
           ? _escapeCharactersMap[e]
           : e)
       .join();
-  
+
   /// Return the HTML escaped version of a string
   String escapeRegExp() => this
       .split('')
-      .map((e) => REGEXP_SPECIAL_CHARACTERS.hasMatch(e)
-          ? r'\\'+e
-          : e)
+      .map((e) => REGEXP_SPECIAL_CHARACTERS.hasMatch(e) ? r'\\' + e : e)
       .join();
+
+  /// Return the un-escaped version of a regex
+  String unEscapeRegExp() => this
+      .replaceAll(r"\'''", r"'''")
+      .replaceAll(r"\\", r"\")
+      .replaceAll(r"\", r"");
 }
