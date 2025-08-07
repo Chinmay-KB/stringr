@@ -5,7 +5,7 @@ void main() {
   runApp(MyApp());
 }
 
-/// Exampe app for Stringr
+/// Example app for Stringr
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyHomePage extends StatefulWidget {
-  _MyHomePage({Key key, this.title}) : super(key: key);
+  _MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 

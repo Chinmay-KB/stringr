@@ -27,11 +27,11 @@ extension Count on String {
   }
 
   /// Counts the characters in a string for which predicate returns `true`
-  int countWhere(Function(String character) predicate) {
-    if (this.isEmpty) return 0;
+  int countWhere(bool Function(String character) predicate) {
+    if (isEmpty) return 0;
     int count = 0;
-    this.runes.forEach((rune) {
-      if (predicate(String.fromCharCode(rune))) count++;
+    runes.forEach((rune) {
+      if (predicate(String.fromCharCode(rune)) == true) count++;
     });
     return count;
   }
