@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:stringr/stringr.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 /// Example app for Stringr
 class MyApp extends StatelessWidget {
+  // ignore: public_member_api_docs
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -15,13 +18,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: _MyHomePage(title: 'Stringr Demo Home Page'),
+      home: const _MyHomePage(title: 'Stringr Demo Home Page'),
     );
   }
 }
 
+/// The home page of the example app
 class _MyHomePage extends StatefulWidget {
-  _MyHomePage({Key? key, required this.title}) : super(key: key);
+  const _MyHomePage({required this.title, Key? key}) : super(key: key);
 
   final String title;
 

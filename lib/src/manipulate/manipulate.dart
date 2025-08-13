@@ -1,41 +1,49 @@
-import '../chop/chop.dart';
-import '../util/strings/diacritics_map.dart';
-import '../util/regex/const.dart';
-import '../case/case.dart';
 import 'package:characters/characters.dart';
+import 'package:stringr/src/case/case.dart';
+import 'package:stringr/src/chop/chop.dart';
+import 'package:stringr/src/util/regex/const.dart';
+import 'package:stringr/src/util/strings/diacritics_map.dart';
 
 /// Bundles destructive string manipulation functionalities
 extension Manipulate on String {
   /// Inserts the [toInsert] string to a string at index [position]
   String insert(String toInsert, int position) {
-    if (position < 0 || position > this.length || toInsert.isEmpty) return this;
-    return this.slice(0, position) + toInsert + this.slice(position);
+    if (position < 0 || position > length || toInsert.isEmpty) {
+      return this;
+    }
+    return slice(0, position) + toInsert + slice(position);
   }
 
   /// Returns a latinised string
-  String latinize() => String.fromCharCodes(replaceCodeUnits(this.codeUnits));
+  String latinize() => String.fromCharCodes(replaceCodeUnits(codeUnits));
 
   /// Reverses a string. Works with strings containing graphemes
   String reverse() =>
-      this.characters.split(''.characters).toList().reversed.join('');
+      characters.split(''.characters).toList().reversed.join();
 
   /// Slugifies the string and replaces diacritics with corresponding latin
   /// characters
   String slugify() =>
-      this.latinize().replaceAll(RegExp(REGEXP_NON_LATIN), '-').kebabCase();
+      latinize().replaceAll(RegExp(regexpNonLatin), '-').kebabCase();
 
   /// Changes a string by deleting [deleteCount] of chacters from the
   /// [startPosition]. Replaces [replacement] charactes instead of deleted
   /// characters
   String splice(int deleteCount, int startPosition, String replacement) {
     if (startPosition < 0) {
-      startPosition = this.length + startPosition;
-      if (startPosition < 0) startPosition = 0;
-    } else if (startPosition > this.length) startPosition = this.length;
-    if (deleteCount < 0) deleteCount = 0;
-    return this.slice(0, startPosition) +
+      startPosition = length + startPosition;
+      if (startPosition < 0) {
+        startPosition = 0;
+      }
+    } else if (startPosition > length) {
+      startPosition = length;
+    }
+    if (deleteCount < 0) {
+      deleteCount = 0;
+    }
+    return slice(0, startPosition) +
         replacement +
-        this.slice(startPosition + deleteCount);
+        slice(startPosition + deleteCount);
   }
 
   /// Translate a string by replacing a given substring with another substring
@@ -49,7 +57,7 @@ extension Manipulate on String {
   /// }
   /// ```
   String translate(Map<String, String> translations) {
-    String translated = this;
+    var translated = this;
     translations.forEach(
       (key, value) {
         translated = translated.replaceAll(key, value);

@@ -1,4 +1,4 @@
-import '../util/regex/const.dart';
+import 'package:stringr/src/util/regex/const.dart';
 
 final _escapeCharactersMap = {
   '<': '&lt;',
@@ -12,22 +12,17 @@ final _escapeCharactersMap = {
 /// Bundles all kinds of string escape conversions
 extension Escape on String {
   /// Return the HTML escaped version of a string
-  String escapeHTML() => this
-      .split('')
-      .map((e) => REGEXP_HTML_SPECIAL_CHARACTERS.hasMatch(e)
-          ? _escapeCharactersMap[e]
-          : e)
+  String escapeHTML() => split('')
+      .map((e) =>
+          regexpHtmlSpecialCharacters.hasMatch(e) ? _escapeCharactersMap[e] : e)
       .join();
 
   /// Return the HTML escaped version of a string
-  String escapeRegExp() => this
-      .split('')
-      .map((e) => REGEXP_SPECIAL_CHARACTERS.hasMatch(e) ? r'\\' + e : e)
+  String escapeRegExp() => split('')
+      .map((e) => regexpSpecialCharacters.hasMatch(e) ? r'\\' + e : e)
       .join();
 
   /// Return the un-escaped version of a regex
-  String unEscapeRegExp() => this
-      .replaceAll(r"\'''", r"'''")
-      .replaceAll(r"\\", r"\")
-      .replaceAll(r"\", r"");
+  String unEscapeRegExp() =>
+      replaceAll(r"\'''", r"'''").replaceAll(r"\\", r"\").replaceAll(r"\", r"");
 }
