@@ -1,23 +1,23 @@
 import 'package:characters/characters.dart';
-import '../split/words.dart';
+import 'package:stringr/src/split/words.dart';
 
 /// Extension bundling functionalities related to counting string units
 extension Count on String {
   /// Counts the characters in a string
-  int count() => this.length;
+  int count() => length;
 
   /// Counts the graphemes in a string
-  int countGrapheme() => this.characters.length;
+  int countGrapheme() => characters.length;
 
   /// Counts the occurences of [find] in a string
   int countOccurences(String find) {
-    int count = 0;
-    int matchIndex = 0;
-    if (this.isEmpty || find.isEmpty) {
+    var count = 0;
+    var matchIndex = 0;
+    if (isEmpty || find.isEmpty) {
       return count;
     }
     do {
-      matchIndex = this.indexOf(find, matchIndex);
+      matchIndex = indexOf(find, matchIndex);
       if (matchIndex != -1) {
         count++;
         matchIndex += find.length;
@@ -27,15 +27,19 @@ extension Count on String {
   }
 
   /// Counts the characters in a string for which predicate returns `true`
-  int countWhere(Function(String character) predicate) {
-    if (this.isEmpty) return 0;
-    int count = 0;
-    this.runes.forEach((rune) {
-      if (predicate(String.fromCharCode(rune))) count++;
-    });
+  int countWhere(bool Function(String character) predicate) {
+    if (isEmpty) {
+      return 0;
+    }
+    var count = 0;
+    for (final rune in runes) {
+      if (predicate(String.fromCharCode(rune)) == true) {
+        count++;
+      }
+    }
     return count;
   }
 
   /// Count the number of words in a string
-  int countWords({String pattern=""}) => this.words(pattern: pattern).length;
+  int countWords({String pattern = ""}) => words(pattern: pattern).length;
 }

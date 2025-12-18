@@ -1,8 +1,7 @@
+import 'package:stringr/src/split/words.dart';
+import 'package:stringr/src/util/object/extended_iterable.dart';
 import 'package:stringr/src/util/regex/const_regex.dart';
-
-import '../util/strings/strings.dart';
-import '../util/object/extended_iterable.dart';
-import '../split/words.dart';
+import 'package:stringr/src/util/strings/strings.dart';
 
 /// Extension bundling all functionalities related to case manipulation
 extension Case on String {
@@ -10,14 +9,13 @@ extension Case on String {
   ///
   /// To prevent acronyms from being converted to upper or lowercase,
   /// [preserveAcronym] can be set to `true`.
-  String camelCase({bool preserveAcronym = false}) => this
-      .words()
+  String camelCase({bool preserveAcronym = false}) => words()
       .mapIndex(
         (word, index) => index == 0
-            ? (preserveAcronym)
+            ? preserveAcronym
                 ? (word!.isUpperCase() ? word : word.lowerCase())
                 : word!.lowerCase()
-            : word!.capitalize(capitalizeAll: false),
+            : word!.capitalize(),
       )
       .toList()
       .join();
@@ -28,9 +26,9 @@ extension Case on String {
   /// uppercase. It is set to `false` by default
   String capitalize({bool capitalizeAll = false}) {
     if (capitalizeAll) {
-      return this.upperCase();
+      return upperCase();
     } else {
-      return this.isEmpty ? "" : this[0].upperCase() + this.substring(1);
+      return isEmpty ? "" : this[0].upperCase() + substring(1);
     }
   }
 
@@ -40,29 +38,28 @@ extension Case on String {
   /// uppercase. It is set to `false` by default
   String decapitalize({bool decapitalizeAll = false}) {
     if (decapitalizeAll) {
-      return this.lowerCase();
+      return lowerCase();
     } else {
-      return this.isEmpty ? "" : this[0].lowerCase() + this.substring(1);
+      return isEmpty ? "" : this[0].lowerCase() + substring(1);
     }
   }
 
   /// Converts a string to kebab-case
   String kebabCase() =>
-      this.words().mapIndex((word, index) => word!.lowerCase()).join("-");
+      words().mapIndex((word, index) => word!.lowerCase()).join("-");
 
   /// Converts the whole string to lowercase
-  String lowerCase() => this.toLowerCase();
+  String lowerCase() => toLowerCase();
 
   /// Converts the whole string to uppercase
-  String upperCase() => this.toUpperCase();
+  String upperCase() => toUpperCase();
 
   /// Converts string to snake_case
   String snakeCase() =>
-      this.words().mapIndex((word, index) => word!.lowerCase()).join("_");
+      words().mapIndex((word, index) => word!.lowerCase()).join("_");
 
   /// Converts uppercase characters of a string to lowercase and vice versa
-  String swapCase() => this
-      .split('')
+  String swapCase() => split('')
       .map((e) => e.isAlphabet()
           ? e.isLowerCase()
               ? e.upperCase()
@@ -72,10 +69,10 @@ extension Case on String {
 
   /// Capitalizes the first letter of each word
   String titleCase() {
-    String wordsRegExp = RegExp(REGEXP_EXTENDED_ASCII).hasMatch(this)
-        ? REGEXP_LATIN_WORD
-        : REGEXP_WORD;
-    return this.replaceAllMapped(
+    final wordsRegExp = RegExp(regexpExtendedAscii).hasMatch(this)
+        ? regexpLatinWord
+        : regexpWord;
+    return replaceAllMapped(
         RegExp(wordsRegExp), (match) => match.group(0)!.capitalize());
   }
 }

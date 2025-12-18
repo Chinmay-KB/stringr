@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image:  google/dart:2.12.0-133.2.beta
+      image: dart:stable
 
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +29,14 @@ jobs:
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
-        run: dart run test_coverage #test --coverage=coverage
+        run: dart test --coverage=coverage
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
+
+      - name: Convert coverage to lcov
+        run: dart pub global run coverage:format_coverage --lcov -i coverage -o coverage/lcov.info --report-on=lib
+
       - uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}} #required

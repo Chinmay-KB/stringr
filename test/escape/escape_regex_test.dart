@@ -1,5 +1,6 @@
-import 'package:stringr/stringr.dart';
 import 'package:test/test.dart';
+
+import '../../lib/src/escape/escape.dart';
 
 void main() {
   test("should return escaped HTML string", () {

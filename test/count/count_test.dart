@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:stringr/stringr.dart';
+import 'package:test/test.dart';
 
 void main() {
   test("should count characters in a string", () {

@@ -111,38 +111,39 @@ Map<int, int> _singleUnit = {};
 Map<int, List<int>> _multipleUnit = {};
 
 void _initCodeUnits() {
-  diacritics.keys.forEach((base) {
+  for (final base in diacritics.keys) {
     if (base.codeUnits.length == 1) {
       final baseUnit = base.codeUnits.first;
-      for (var codeUnit in diacritics[base]!.codeUnits) {
+      for (final codeUnit in diacritics[base]!.codeUnits) {
         _singleUnit[codeUnit] = baseUnit;
       }
-    } else
-      for (var codeUnit in diacritics[base]!.codeUnits) {
+    } else {
+      for (final codeUnit in diacritics[base]!.codeUnits) {
         _multipleUnit[codeUnit] = base.codeUnits;
       }
-  });
+    }
+  }
 }
 
 // ignore: public_member_api_docs
 List<int> replaceCodeUnits(List<int> codeUnits) {
   _initCodeUnits();
-  final List<int> finalString = [];
-  for (int original in codeUnits) {
+  final finalString = <int>[];
+  for (final original in codeUnits) {
     // Combining Diacritical Marks in Unicode
     if (original >= 0x0300 && original <= 0x036F) {
       continue;
     }
 
     // single unit replacements
-    final int? singleUnit = _singleUnit[original];
+    final singleUnit = _singleUnit[original];
     if (singleUnit != null) {
       finalString.add(singleUnit);
       continue;
     }
 
     // multi unit replacements
-    final List<int>? multipleUnit = _multipleUnit[original];
+    final multipleUnit = _multipleUnit[original];
     if (multipleUnit != null) {
       finalString.addAll(multipleUnit);
       continue;
