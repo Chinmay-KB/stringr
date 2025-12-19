@@ -4,6 +4,7 @@ import 'package:stringr/src/util/strings/surrogate_pair.dart';
 /// Extension bundling all functions related to destructive string manipulation
 extension Chop on String {
   /// Get a character from a specific index
+  @Deprecated('Use string[index] instead')
   String charAt(int index) => this[index];
 
   /// Get the unicode point value from a specific index
@@ -32,19 +33,21 @@ extension Chop on String {
   /// Get a grapheme from a string specified at an [index]
   String graphemeAt(int index) => characters.elementAt(index);
 
-  /// Returns a string of reduced size. Length of returned string is 
+  /// Returns a string of reduced size. Length of returned string is
   /// <=[pruneLength]
   ///
-  /// Ensured that the words will not be broken, returned string is always less
-  /// than or equal to the [pruneLength] provided
+  /// Ensures that words will not be broken, returned string is always less
+  /// than or equal to the [pruneLength] provided. Handles spaces, tabs, and
+  /// other whitespace characters.
   String prune(int pruneLength) {
-    String result;
-    if (length <= pruneLength) {
-      result = this;
-    } else {
-      result = substring(0, pruneLength);
-      if (this[pruneLength] != " ") {
-        result = result.substring(0, result.lastIndexOf(" "));
+    if (length <= pruneLength) return this;
+
+    final result = substring(0, pruneLength);
+    // Check if we're in the middle of a word
+    if (pruneLength < length && !RegExp(r'\s').hasMatch(this[pruneLength])) {
+      final lastWhitespace = result.lastIndexOf(RegExp(r'\s'));
+      if (lastWhitespace > 0) {
+        return result.substring(0, lastWhitespace);
       }
     }
     return result;

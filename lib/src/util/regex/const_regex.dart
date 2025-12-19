@@ -22,7 +22,7 @@ const regexpWord = '(?:[$upperCaseLetter][$diacriticalMark]*)?(?:[$lowerCaseLett
 
 /// Regular expression to match words from Basic Latin and Latin-1 Supplement blocks
 const regexpLatinWord =
-    "/[A-Z\xC0-\xD6\xD8-\xDE]?[a-z\xDF-\xF6\xF8-\xFF]+|[A-Z\xC0-\xD6\xD8-\xDE]+(?![a-z\xDF-\xF6\xF8-\xFF])|d+/g";
+    r'[A-Z\xC0-\xD6\xD8-\xDE]?[a-z\xDF-\xF6\xF8-\xFF]+|[A-Z\xC0-\xD6\xD8-\xDE]+(?![a-z\xDF-\xF6\xF8-\xFF])|\d+';
 
 /// Regular expression to match alpha characters
 ///
@@ -35,4 +35,4 @@ final regexpAlpha = RegExp('^(?:[$lowerCaseLetter$upperCaseLetter][$diacriticalM
 final regexpAlphaDigit = RegExp('^((?:[$lowerCaseLetter$upperCaseLetter][$diacriticalMark]*)|[$digit])+\$');
 
 /// Regular expression to match Extended ASCII characters, i.e. the first 255
-const regexpExtendedAscii = "/^[\\x01-\\xFF]*\$/";
+const regexpExtendedAscii = r'^[\x01-\xFF]*$';

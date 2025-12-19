@@ -107,27 +107,40 @@ final diacritics = {
 
 // ignore: public_member_api_docs
 final Map<String, String> diacriticsMap = {};
-Map<int, int> _singleUnit = {};
-Map<int, List<int>> _multipleUnit = {};
 
-void _initCodeUnits() {
+/// Lazy-initialized map for single code unit replacements
+late final Map<int, int> _singleUnit = _buildSingleUnit();
+
+/// Lazy-initialized map for multiple code unit replacements
+late final Map<int, List<int>> _multipleUnit = _buildMultipleUnit();
+
+Map<int, int> _buildSingleUnit() {
+  final result = <int, int>{};
   for (final base in diacritics.keys) {
     if (base.codeUnits.length == 1) {
       final baseUnit = base.codeUnits.first;
       for (final codeUnit in diacritics[base]!.codeUnits) {
-        _singleUnit[codeUnit] = baseUnit;
-      }
-    } else {
-      for (final codeUnit in diacritics[base]!.codeUnits) {
-        _multipleUnit[codeUnit] = base.codeUnits;
+        result[codeUnit] = baseUnit;
       }
     }
   }
+  return result;
+}
+
+Map<int, List<int>> _buildMultipleUnit() {
+  final result = <int, List<int>>{};
+  for (final base in diacritics.keys) {
+    if (base.codeUnits.length > 1) {
+      for (final codeUnit in diacritics[base]!.codeUnits) {
+        result[codeUnit] = base.codeUnits;
+      }
+    }
+  }
+  return result;
 }
 
 // ignore: public_member_api_docs
 List<int> replaceCodeUnits(List<int> codeUnits) {
-  _initCodeUnits();
   final finalString = <int>[];
   for (final original in codeUnits) {
     // Combining Diacritical Marks in Unicode
