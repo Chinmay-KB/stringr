@@ -1,88 +1,122 @@
-# stringr 🧵
+# stringr
 
-String manipulation in dart/flutter on steroids! ⚡⚡
-This dart plugin is null safety compliant 😎😎
-
-![codecov](https://codecov.io/gh/Chinmay-KB/stringr/branch/master/graph/badge.svg?token=UIWY4OF2TE)
-![codemagic](https://api.codemagic.io/apps/5fecda726b96ea001cebef4a/flutter-package/status_badge.svg)
+[![pub package](https://img.shields.io/pub/v/stringr.svg)](https://pub.dev/packages/stringr)
+[![codecov](https://codecov.io/gh/Chinmay-KB/stringr/branch/master/graph/badge.svg?token=UIWY4OF2TE)](https://codecov.io/gh/Chinmay-KB/stringr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+A comprehensive string manipulation library for Dart and Flutter. Inspired by [VocaJS](https://vocajs.com/), stringr provides powerful string operations that work seamlessly with Latin, non-Latin, and Unicode strings.
 
-This dart plugin is inspired 🧠 by [Voca js](https://vocajs.com/#) library. This plugin includes all the nifty functions required for powerful string manipulations. 
+## Features
 
-How powerful? Glad you asked!!
+- **Case Conversion** - camelCase, snake_case, kebab-case, Title Case, PascalCase
+- **Unicode Support** - Full support for non-Latin scripts, diacritics, and grapheme clusters
+- **Smart Word Detection** - Uses regex patterns instead of simple whitespace splitting
+- **Null Safety** - Fully null-safe and compatible with Dart 3.0+
+- **Zero Dependencies** - Only depends on the `characters` package for grapheme support
 
-This plugin works on both latin and non latin strings, and uses complex regular expressions to extract words from strings on manipulations, rather than just calling `split(" ")` on a string.
-```dart
+## Installation
 
-import 'package:stringr/stringr.dart';
+Add to your `pubspec.yaml`:
 
-void main(){
- print("camel case".camelCase()); // Output - "camelCase"
- print("HTMLview".camelCase(preserveAcronym=true)); // Output - "HTMLView"
- print("/this/is/a/directory".camelCase()); // Output - "thisIsADirectory"
- print("полет птицы".kebabCase()); // Output - "полет_птицы"
- print("La variété la plus fréquente est la blanche".prune(12)); // Output - La variété
-print("2infinity*@#@AND93beyond".words()); // Output - ["2", "infinity", "AND", "93", "beyond"]
- print("gravity".words(pattern: r"\w{1,2}")); // Output - ['gr', 'av', 'it', 'y']
-}
- 
+```yaml
+dependencies:
+  stringr: ^1.2.0
 ```
-Convert a string to its latin counterpart! Can reverse not only pure strings, but strings with grapheme clusters as well😎
+
+## Quick Start
 
 ```dart
-
 import 'package:stringr/stringr.dart';
 
-void main(){
-print("cafe\u0301".latinize()); // Output - cafe
-print("anglikonų šiurkščios užrašinėti".latinize());// Output - 'anglikonu siurkscios uzrasineti'
-print("𝌆 bar mañana mañana".reverse()); // Output - 'anañam anañam rab 𝌆'
-// Splitting and reversing normally would give this as output
-// anãnam anañam rab ��
+void main() {
+  // Case conversions
+  print('hello world'.toCamelCase);        // helloWorld
+  print('hello world'.toSnakeCase);        // hello_world
+  print('hello world'.toKebabCase);        // hello-world
+  print('hello world'.toPascalCase);       // HelloWorld
+
+  // Smart word extraction
+  print('XMLHttpRequest'.camelCase());     // xmlHttpRequest
+  print('/path/to/file'.camelCase());      // pathToFile
+  print('2infinity&beyond'.words());       // [2, infinity, beyond]
 }
- 
 ```
-Support for graphemes is also included in this plugin. [characters](https://pub.dev/packages/characters) plugin is used to facilitate some of the functionalities.
+
+## Unicode & Non-Latin Support
+
+stringr shines with complex Unicode strings:
 
 ```dart
+// Non-Latin scripts
+print('полет птицы'.kebabCase());          // полет-птицы
+print('La variété française'.prune(12));   // La variété
 
-import 'package:stringr/stringr.dart';
+// Diacritics and latinization
+print('café'.latinize());                  // cafe
+print('anglikonų šiurkščios'.latinize());  // anglikonu siurkscios
 
-void main(){
- print("cafe\u0301".countGrapheme()); // Output - 4
- print("\uD835\uDC00\uD835\uDC01".countGrapheme()); // Output - 2
- print("\uD835\uDC00\uD835\uDC01".graphemeAt(1)); // Output - "\uD835\uDC01"
-print("stellar bomb".codePoints()); // Output - [0x73, 0x74, 0x65, 0x6c, 0x6c, 0x61, 0x72, 0x20, 0x62, 0x6f, 0x6d, 0x62]
- print('man\u0303ana'.graphemes()); // Output - ['m','a', 'n\u0303', 'a', 'n', 'a']
-}
- 
+// Grapheme-aware operations
+print('café'.countGrapheme());             // 4 (not 5!)
+print('👨‍👩‍👧‍👦'.reverse());                      // 👨‍👩‍👧‍👦 (family emoji stays intact)
 ```
-HTML strings can be escaped!
 
-```dart
+## API Overview
 
-import 'package:stringr/stringr.dart';
+### Case Manipulation
+| Method | Description | Example |
+|--------|-------------|---------|
+| `camelCase()` | Convert to camelCase | `'foo bar'` → `'fooBar'` |
+| `snakeCase()` | Convert to snake_case | `'foo bar'` → `'foo_bar'` |
+| `kebabCase()` | Convert to kebab-case | `'foo bar'` → `'foo-bar'` |
+| `titleCase()` | Capitalize each word | `'foo bar'` → `'Foo Bar'` |
+| `capitalize()` | Capitalize first char | `'foo'` → `'Foo'` |
+| `swapCase()` | Toggle case | `'FoO'` → `'fOo'` |
 
-void main(){
-print('<>&"\'`'.escapeHTML()); // Output - '&lt;&gt;&amp;&quot;&#x27;&#x60;'
-print('<p>wonderful world</p>'.escapeHTML());// Output - '&lt;p&gt;wonderful world&lt;/p&gt;'
-}
- 
-```
-You can count on stringr to count the words, latin, non latin, or strings with grapheme clusters!
-```dart
+### String Chopping
+| Method | Description | Example |
+|--------|-------------|---------|
+| `truncate(n)` | Truncate to n chars | `'hello world'` → `'hello...'` |
+| `prune(n)` | Truncate without breaking words | `'hello world'` → `'hello'` |
+| `first(n)` | Get first n chars | `'hello'` → `'hel'` |
+| `last(n)` | Get last n chars | `'hello'` → `'llo'` |
+| `slice(start, end)` | Extract substring | `'hello'` → `'ell'` |
 
-import 'package:stringr/stringr.dart';
+### Counting
+| Method | Description | Example |
+|--------|-------------|---------|
+| `countGrapheme()` | Count visible characters | `'café'` → `4` |
+| `countOccurrences(s)` | Count substring occurrences | `'banana'.countOccurrences('a')` → `3` |
+| `countWords()` | Count words | `'hello world'` → `2` |
+| `countWhere(fn)` | Count matching chars | Custom predicate |
 
-void main(){
-print("a year without rain".count()); // Output - 19
-print("foo\uD834\uDF06\u0303\u035C\u035D\u035Ebar".countGrapheme());// Output - 7
-print("to be or not to be".countOccurences("to")); // Output - 2
-print("aBCdeFgH".countWhere((character) => character.isAlphabet())); // Output - 8
-print("NewYork".countWords()); // Output - 2
-}
- 
-```
-* Some of the functionalities, like `char()` and `codePoints` are either simple enough to implement or were available in the characters package. But still I decided to add them to make bundle everything under a similar syntax ( i.e- calling the extension functions on string). 
-* For functions like `padLeft()` and `trim()` which already are extension functions and inbuilt in dart, I have not included them in this plugin as the syntax would be similar to that of this plugin.
+### Manipulation
+| Method | Description | Example |
+|--------|-------------|---------|
+| `reverse()` | Reverse (grapheme-aware) | `'hello'` → `'olleh'` |
+| `slugify()` | URL-friendly slug | `'Hello World!'` → `'hello-world'` |
+| `latinize()` | Remove diacritics | `'café'` → `'cafe'` |
+| `insert(s, i)` | Insert at position | `'hllo'.insert('e', 1)` → `'hello'` |
+
+### Escaping
+| Method | Description |
+|--------|-------------|
+| `escapeHtml()` | Escape HTML entities |
+| `unescapeHtml()` | Unescape HTML entities |
+| `escapeRegExp()` | Escape regex special chars |
+
+## Why stringr?
+
+Most string libraries fail with complex Unicode. stringr handles:
+
+- **Grapheme clusters**: `'café'` is 4 characters, not 5
+- **Surrogate pairs**: Emoji and special symbols work correctly
+- **Non-Latin scripts**: Cyrillic, Greek, accented Latin, and more
+- **Smart word detection**: `'XMLHttpRequest'` → `['XML', 'Http', 'Request']`
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

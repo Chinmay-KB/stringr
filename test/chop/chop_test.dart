@@ -68,6 +68,7 @@ void main() {
         "Is this where you wanna go, how much you wanna miss"
             .truncate(10, endString: "noi"),
         "Is thisnoi");
-    expect("Little Red Riding Hood".truncate(8, endString: "(more)"), "Li(more)");
+    expect(
+        "Little Red Riding Hood".truncate(8, endString: "(more)"), "Li(more)");
   });
 }

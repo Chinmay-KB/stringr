@@ -62,6 +62,5 @@ extension Chop on String {
   String truncate(int truncateLength, {String endString = "..."}) =>
       truncateLength >= length
           ? this
-          : slice(0,truncateLength - endString.length) +
-              endString;
+          : slice(0, truncateLength - endString.length) + endString;
 }

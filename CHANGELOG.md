@@ -1,3 +1,13 @@
+## [1.2.1] - 2025
+
+### Documentation
+* Revamped README with cleaner structure and API tables
+* Added CONTRIBUTING.md for contributors
+* Removed codemagic badge
+
+### Code Quality
+* Code formatting improvements across source files
+
 ## [1.2.0] - 2025
 
 ### New Features

@@ -1,6 +1,6 @@
 name: stringr
 description: Comprehensive string manipulation plugin for dart. Handles operations on latin, non latin and grapheme clusters alike! Features inspured from VocaJs
-version: 1.2.0
+version: 1.2.1
 homepage: https://github.com/Chinmay-KB/stringr
 
 environment:

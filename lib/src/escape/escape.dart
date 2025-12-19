@@ -49,8 +49,7 @@ extension Escape on String {
   /// Return the unescaped version of a regex-escaped string
   ///
   /// Removes escape sequences: `\\x` becomes `x`
-  String unescapeRegExp() =>
-      replaceAll(r'\\', r'\').replaceAll(r'\', '');
+  String unescapeRegExp() => replaceAll(r'\\', r'\').replaceAll(r'\', '');
 
   /// Return the un-escaped version of a regex
   @Deprecated('Use unescapeRegExp instead (corrected implementation)')

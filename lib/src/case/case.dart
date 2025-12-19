@@ -33,7 +33,8 @@ extension Case on String {
   ///
   /// If [decapitalizeAll] is set to `true`, the whole string is converted to
   /// lowercase. It is set to `false` by default
-  String decapitalize({bool decapitalizeAll = false}) => switch (decapitalizeAll) {
+  String decapitalize({bool decapitalizeAll = false}) =>
+      switch (decapitalizeAll) {
         true => toLowerCase(),
         false => isEmpty ? '' : this[0].toLowerCase() + substring(1),
       };
