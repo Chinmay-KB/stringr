@@ -13,9 +13,9 @@ extension Case on String {
       .mapIndex(
         (word, index) => index == 0
             ? preserveAcronym
-                ? (word!.isUpperCase() ? word : word.toLowerCase())
-                : word!.toLowerCase()
-            : word!.capitalize(),
+                ? (word.isUpperCase() ? word : word.toLowerCase())
+                : word.toLowerCase()
+            : word.capitalize(),
       )
       .toList()
       .join();
@@ -40,7 +40,7 @@ extension Case on String {
 
   /// Converts a string to kebab-case
   String kebabCase() =>
-      words().mapIndex((word, index) => word!.toLowerCase()).join("-");
+      words().mapIndex((word, index) => word.toLowerCase()).join("-");
 
   /// Converts the whole string to lowercase
   @Deprecated('Use .toLowerCase() instead')
@@ -52,7 +52,7 @@ extension Case on String {
 
   /// Converts string to snake_case
   String snakeCase() =>
-      words().mapIndex((word, index) => word!.toLowerCase()).join("_");
+      words().mapIndex((word, index) => word.toLowerCase()).join("_");
 
   /// Converts uppercase characters of a string to lowercase and vice versa
   String swapCase() {

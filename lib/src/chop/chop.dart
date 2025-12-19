@@ -40,7 +40,9 @@ extension Chop on String {
   /// than or equal to the [pruneLength] provided. Handles spaces, tabs, and
   /// other whitespace characters.
   String prune(int pruneLength) {
-    if (length <= pruneLength) return this;
+    if (length <= pruneLength) {
+      return this;
+    }
 
     final result = substring(0, pruneLength);
     // Check if we're in the middle of a word
