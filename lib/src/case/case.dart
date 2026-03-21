@@ -15,7 +15,9 @@ extension Case on String {
             ? preserveAcronym
                 ? (word.isUpperCase() ? word : word.toLowerCase())
                 : word.toLowerCase()
-            : word.capitalize(),
+            : word.isUpperCase()
+                ? word
+                : word.capitalize(),
       )
       .toList()
       .join();
@@ -26,7 +28,11 @@ extension Case on String {
   /// uppercase. It is set to `false` by default
   String capitalize({bool capitalizeAll = false}) => switch (capitalizeAll) {
         true => toUpperCase(),
-        false => isEmpty ? '' : this[0].toUpperCase() + substring(1),
+        false => isEmpty
+            ? ''
+            : this[0] == this[0].toUpperCase()
+                ? this[0].toUpperCase() + substring(1).toLowerCase()
+                : this[0].toUpperCase() + substring(1),
       };
 
   /// Decapitalizes the first character of the string
