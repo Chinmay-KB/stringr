@@ -26,6 +26,8 @@ void main() {
     expect("excuse moi".capitalize(capitalizeAll: true), "EXCUSE MOI");
     expect("".capitalize(), "");
     expect("macBook".capitalize(), "MacBook");
+    expect("HELLO".capitalize(), "Hello");
+    expect("HeLLo".capitalize(), "Hello");
     expect("яблоко".capitalize(), "Яблоко");
     expect("420".capitalize(), "420");
     expect("".capitalize(), "");
