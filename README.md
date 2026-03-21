@@ -117,6 +117,13 @@ Most string libraries fail with complex Unicode. stringr handles:
 
 Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
 
+## Project Health
+
+- [Contributing Guide](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+- [Support Guide](SUPPORT.md)
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.

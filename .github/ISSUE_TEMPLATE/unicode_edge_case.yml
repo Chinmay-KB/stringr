@@ -1,0 +1,52 @@
+name: Unicode edge case
+description: Report behavior involving graphemes, combining marks, emoji, casing, transliteration, or non-Latin scripts.
+title: "[Unicode]: "
+labels:
+  - bug
+  - unicode
+body:
+  - type: textarea
+    id: input
+    attributes:
+      label: Input string
+      description: Provide the exact input string. Include escaped form too if helpful.
+      placeholder: "👨‍👩‍👧‍👦 family / café / XMLHttpRequest / полет птицы"
+    validations:
+      required: true
+  - type: input
+    id: method
+    attributes:
+      label: Method or API used
+      placeholder: slugify(), words(), reverse(), camelCase()
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Share a small runnable example.
+      placeholder: |
+        import 'package:stringr/stringr.dart';
+
+        void main() {
+          print('café'.countGrapheme());
+        }
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual output
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Mention script, locale expectations, normalization details, or comparisons with other libraries if relevant.
