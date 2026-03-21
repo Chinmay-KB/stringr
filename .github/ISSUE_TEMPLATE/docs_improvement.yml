@@ -1,0 +1,25 @@
+name: Documentation improvement
+description: Report missing, unclear, or incorrect documentation.
+title: "[Docs]: "
+labels:
+  - documentation
+body:
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Which file, page, or section needs improvement?
+      placeholder: README.md, CONTRIBUTING.md, API docs, examples, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is unclear or missing?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: Optional, but helpful if you already know what would make the docs clearer.
