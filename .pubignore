@@ -1,0 +1,11 @@
+.github/
+AGENTS.md
+CLAUDE.md
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+SECURITY.md
+SUPPORT.md
+codecov.yml
+codemagic.yaml
+coverage/
+coverage_badge.svg

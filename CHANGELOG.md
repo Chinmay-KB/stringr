@@ -1,3 +1,12 @@
+## [1.2.2] - 2026
+
+### Bug Fixes
+* Fixed `capitalize()` to normalize already-capitalized and all-uppercase inputs like `HELLO` and `HeLLo` to `Hello`
+* Preserved acronym tokens in `camelCase()` while fixing `capitalize()` behavior
+
+### Tests
+* Added regression coverage for uppercase and mixed-case `capitalize()` inputs
+
 ## [1.2.1] - 2025
 
 ### Documentation
@@ -60,4 +69,3 @@
 ## [0.0.2-prerelease] - 04/01/2021
 
 * Trying to get full pub score
-
