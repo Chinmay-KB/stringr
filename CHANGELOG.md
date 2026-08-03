@@ -1,3 +1,15 @@
+## [1.2.2] - 2026-04-03
+
+### Documentation
+* Added a Unicode behavior guide with examples for graphemes, word boundaries, case transforms, and slug generation
+* Expanded the README to point readers to the Unicode behavior guide
+
+### Tests
+* Added fixture-backed Unicode regression coverage for combining marks, emoji grapheme clusters, Devanagari and Arabic word boundaries, dotted `İ`, eszett, and acronym-heavy identifiers
+
+### Code Quality
+* Removed deprecated API usage from tests and the example app so `dart analyze` is clean
+
 ## [1.2.1] - 2025
 
 ### Documentation
@@ -60,4 +72,3 @@
 ## [0.0.2-prerelease] - 04/01/2021
 
 * Trying to get full pub score
-

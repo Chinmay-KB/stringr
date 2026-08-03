@@ -42,7 +42,7 @@ void main() {
   });
 
   test("should return the character at the index", () {
-    expect("What is the".charAt(0), "W");
+    expect("What is the"[0], "W");
   });
 
   test("should return the first some part of the string", () {

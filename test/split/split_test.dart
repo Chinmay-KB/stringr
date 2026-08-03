@@ -22,12 +22,12 @@ void main() {
   });
 
   test("should split a string into characters", () {
-    expect("vada pav".chars(), ['v', 'a', 'd', 'a', ' ', 'p', 'a', 'v']);
-    expect('1971'.chars(), ['1', '9', '7', '1']);
+    expect("vada pav".split(''), ['v', 'a', 'd', 'a', ' ', 'p', 'a', 'v']);
+    expect('1971'.split(''), ['1', '9', '7', '1']);
   });
 
   test("should split a string into code points", () {
-    expect("stellar bomb".codePoints(), [
+    expect("stellar bomb".codeUnits, [
       0x73,
       0x74,
       0x65,
@@ -41,8 +41,8 @@ void main() {
       0x6d,
       0x62,
     ]);
-    expect('\n\t'.codePoints(), [0xa, 0x9]);
-    expect('man\u0303ana'.codePoints(),
+    expect('\n\t'.codeUnits, [0xa, 0x9]);
+    expect('man\u0303ana'.codeUnits,
         [0x6d, 0x61, 0x6e, 0x303, 0x61, 0x6e, 0x61]);
   });
 

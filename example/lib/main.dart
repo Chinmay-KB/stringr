@@ -26,7 +26,7 @@ void main() {
   print('');
 
   // Count operations
-  print('count: "hello" -> ${"hello".count()}');
+  print('length: "hello" -> ${"hello".length}');
   print('countWords: "hello world foo" -> ${"hello world foo".countWords()}');
   print('countGrapheme: "café" -> ${"café".countGrapheme()}');
   print('');

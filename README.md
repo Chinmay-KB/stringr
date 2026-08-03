@@ -20,7 +20,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  stringr: ^1.2.0
+  stringr: ^1.2.2
 ```
 
 ## Quick Start
@@ -56,7 +56,7 @@ print('café'.latinize());                  // cafe
 print('anglikonų šiurkščios'.latinize());  // anglikonu siurkscios
 
 // Grapheme-aware operations
-print('café'.countGrapheme());             // 4 (not 5!)
+print('cafe\u0301'.countGrapheme());       // 4
 print('👨‍👩‍👧‍👦'.reverse());                      // 👨‍👩‍👧‍👦 (family emoji stays intact)
 ```
 
@@ -109,9 +109,12 @@ print('👨‍👩‍👧‍👦'.reverse());                      // 👨‍�
 Most string libraries fail with complex Unicode. stringr handles:
 
 - **Grapheme clusters**: `'café'` is 4 characters, not 5
+- **Combining marks**: `'cafe\u0301'` is treated as 4 graphemes, not 5 code points
 - **Surrogate pairs**: Emoji and special symbols work correctly
 - **Non-Latin scripts**: Cyrillic, Greek, accented Latin, and more
 - **Smart word detection**: `'XMLHttpRequest'` → `['XML', 'Http', 'Request']`
+
+Read more in the [Unicode Behavior Guide](docs/unicode-behavior.md).
 
 ## Contributing
 

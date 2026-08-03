@@ -4,8 +4,8 @@ import '../../lib/src/escape/escape.dart';
 
 void main() {
   test("should return escaped HTML string", () {
-    expect('<>&"\'`'.escapeHTML(), '&lt;&gt;&amp;&quot;&#x27;&#x60;');
-    expect('<p>wonderful world</p>'.escapeHTML(),
+    expect('<>&"\'`'.escapeHtml(), '&lt;&gt;&amp;&quot;&#x27;&#x60;');
+    expect('<p>wonderful world</p>'.escapeHtml(),
         '&lt;p&gt;wonderful world&lt;/p&gt;');
   });
 
@@ -14,6 +14,6 @@ void main() {
   });
 
   test('should return un-escaped regex', () {
-    expect(r"500\\-200".unEscapeRegExp(), '500-200');
+    expect(r"500\\-200".unescapeRegExp(), '500-200');
   });
 }

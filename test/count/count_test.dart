@@ -3,9 +3,9 @@ import 'package:test/test.dart';
 
 void main() {
   test("should count characters in a string", () {
-    expect("a year without rain".count(), 19);
-    expect("".count(), 0);
-    expect("232".count(), 3);
+    expect("a year without rain".length, 19);
+    expect("".length, 0);
+    expect("232".length, 3);
   });
 
   test("should return number of graphemes (observable characters) in a string",
@@ -19,9 +19,9 @@ void main() {
   });
 
   test("should return the number of occurences of a substring in a string", () {
-    expect("to be or not to be".countOccurences("to"), 2);
-    expect("*******".countOccurences("**"), 3);
-    expect("2647484".countOccurences("4"), 3);
+    expect("to be or not to be".countOccurrences("to"), 2);
+    expect("*******".countOccurrences("**"), 3);
+    expect("2647484".countOccurrences("4"), 3);
   });
 
   test(

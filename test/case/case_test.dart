@@ -87,12 +87,12 @@ void main() {
   });
 
   test("the string should be converted to uppercase", () {
-    expect("of ".upperCase(), "OF ");
-    expect("42".upperCase(), "42");
+    expect("of ".toUpperCase(), "OF ");
+    expect("42".toUpperCase(), "42");
   });
 
   test("the string should be converted to lowercase", () {
-    expect("Pure".lowerCase(), "pure");
-    expect("1magiNati0n".lowerCase(), "1maginati0n");
+    expect("Pure".toLowerCase(), "pure");
+    expect("1magiNati0n".toLowerCase(), "1maginati0n");
   });
 }
