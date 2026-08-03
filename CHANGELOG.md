@@ -1,10 +1,15 @@
 ## [1.2.2] - 2026-04-03
 
+### Bug Fixes
+* Fixed `capitalize()` to normalize already-capitalized and all-uppercase inputs like `HELLO` and `HeLLo` to `Hello`
+* Preserved acronym tokens in `camelCase()` while fixing `capitalize()` behavior
+
 ### Documentation
 * Added a Unicode behavior guide with examples for graphemes, word boundaries, case transforms, and slug generation
 * Expanded the README to point readers to the Unicode behavior guide
 
 ### Tests
+* Added regression coverage for uppercase and mixed-case `capitalize()` inputs
 * Added fixture-backed Unicode regression coverage for combining marks, emoji grapheme clusters, Devanagari and Arabic word boundaries, dotted `İ`, eszett, and acronym-heavy identifiers
 
 ### Code Quality
