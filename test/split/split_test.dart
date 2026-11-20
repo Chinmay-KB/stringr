@@ -21,6 +21,22 @@ void main() {
     ]);
   });
 
+  test("should accept both String and RegExp patterns", () {
+    expect('a-b c'.words(pattern: RegExp(r'\w+')), ['a', 'b', 'c']);
+    expect('a-b c'.words(pattern: r'\w+'), ['a', 'b', 'c']);
+    expect('Ab-cD'.words(pattern: RegExp('[a-z]+')), ['b', 'c']);
+    expect('Ab-cD'.words(pattern: RegExp('[a-z]+', caseSensitive: false)),
+        ['Ab', 'cD']);
+    expect('1234567890'.words(pattern: RegExp(r'\d{1,3}')),
+        ['123', '456', '789', '0']);
+    expect('a-b c'.countWords(pattern: r'\w+'), 3);
+  });
+
+  test("an empty pattern keeps the default word splitting", () {
+    expect('hello big-world'.words(), ['hello', 'big', 'world']);
+    expect('XMLHttpRequest'.words(), ['XML', 'Http', 'Request']);
+  });
+
   test("should split a string into characters", () {
     expect("vada pav".chars(), ['v', 'a', 'd', 'a', ' ', 'p', 'a', 'v']);
     expect('1971'.chars(), ['1', '9', '7', '1']);

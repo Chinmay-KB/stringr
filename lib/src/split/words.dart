@@ -3,22 +3,22 @@ import 'package:stringr/src/util/regex/const_regex.dart';
 
 /// Extension function bundling all functionalities related to splitting a string
 extension Words on String {
-  /// Split a string according to a given pattern/regex. Splits on [" "] by
-  /// default. To split according to a regex, pass the regex pattern string to
-  /// [pattern] parameter
+  /// Split a string into words. By default (empty [pattern]) it uses a Unicode
+  /// aware word matcher, so `camelCase`, digits and non-Latin scripts are
+  /// split into separate words.
+  ///
+  /// To use a custom matcher, pass either a `String` holding a regular
+  /// expression source or a ready made `RegExp` to [pattern]. The matches of
+  /// the pattern are returned. A `RegExp` is used as is, so its flags (for
+  /// example `caseSensitive` or `unicode`) are respected.
   List<String> words({Pattern pattern = ""}) {
-    Pattern patternRegExp;
-    if (pattern == "") {
-      patternRegExp = RegExp(regexpExtendedAscii).hasMatch(this)
-          ? regexpLatinWord
-          : regexpWord;
+    final Pattern matcher;
+    if (pattern is String) {
+      matcher = pattern.isEmpty ? defaultWordRegExp(this) : RegExp(pattern);
     } else {
-      patternRegExp = pattern;
+      matcher = pattern;
     }
-    return RegExp(patternRegExp.toString())
-        .allMatches(this)
-        .map((e) => e.group(0)!)
-        .toList();
+    return matcher.allMatches(this).map((e) => e.group(0)!).toList();
   }
 
   /// Splits a string into list of single characters

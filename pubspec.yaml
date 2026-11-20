@@ -1,7 +1,15 @@
 name: stringr
-description: Comprehensive string manipulation plugin for dart. Handles operations on latin, non latin and grapheme clusters alike! Features inspured from VocaJs
-version: 1.2.2
+description: String case conversion (camelCase, snake_case, kebab-case), slugify, remove diacritics (latinize), truncate and count words, with Unicode and grapheme support.
+version: 1.3.0
 homepage: https://github.com/Chinmay-KB/stringr
+repository: https://github.com/Chinmay-KB/stringr
+issue_tracker: https://github.com/Chinmay-KB/stringr/issues
+topics:
+  - string
+  - unicode
+  - text-processing
+  - case-conversion
+  - slugify
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
