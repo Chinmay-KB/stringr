@@ -55,6 +55,14 @@ print('hello world'.toPascalCase); // HelloWorld
 print('XMLHttpRequest'.camelCase(preserveAcronym: true)); // XMLHttpRequest
 ```
 
+`titleCase()` keeps contraction endings (`s`, `t`, `d`, `m`, `ll`, `re`, `ve` after an apostrophe) lowercase. Other apostrophes behave like any punctuation, so names are capitalized.
+
+```dart
+print("it's a dog-friendly café".titleCase()); // It's A Dog-Friendly Café
+print("DON'T STOP".titleCase()); // Don't Stop
+print("o'neil and d'angelo".titleCase()); // O'Neil And D'Angelo
+```
+
 Non-Latin text works the same way:
 
 ```dart
@@ -69,6 +77,13 @@ print('Привет мир'.kebabCase()); // привет-мир
 print('XMLHttpRequest'.words()); // [XML, Http, Request]
 print('foo_bar-baz qux'.words()); // [foo, bar, baz, qux]
 print('Hello, world! 2infinity&beyond'.words()); // [Hello, world, 2, infinity, beyond]
+```
+
+Pass `pattern` as a `String` or a `RegExp` to use your own word matcher:
+
+```dart
+print('a-b c'.words(pattern: RegExp(r'\w+'))); // [a, b, c]
+print('gravity'.words(pattern: r'\w{1,2}')); // [gr, av, it, y]
 ```
 
 ### Create a URL slug from a string in Dart?
@@ -92,19 +107,31 @@ print('abc123def'.slugify()); // abc-123-def
 print('café'.latinize()); // cafe
 print('Crème Brûlée'.latinize()); // Creme Brulee
 print('Åre Zürich Łódź'.latinize()); // Are Zurich Lodz
+print('straße'.latinize()); // strasse
 print('café'.latinize()); // cafe
 print('Привет'.latinize()); // Privet
 ```
 
 ### Truncate a string without cutting a word in Dart?
 
-`prune(length)` returns at most `length` characters and cuts at the last whitespace before that point. `truncate(length)` cuts at exactly `length` characters in total, including the ending string (default `...`).
+`prune(length)` returns at most `length` characters and cuts at the last whitespace before that point. `truncate(length)` cuts at exactly `length` characters in total, including the ending string (default `...`). Lengths are UTF-16 code units, like `String.length`, and these methods never split an emoji or other grapheme cluster, so the result can be shorter than `length` but never longer. `truncate` never throws: if `length` is smaller than the ending string, it returns the ending string cut to `length`.
 
 ```dart
 print('The quick brown fox jumps'.prune(15)); // The quick brown
 print('Привет как дела'.prune(10)); // Привет как
 print('The quick brown fox jumps'.truncate(15)); // The quick br...
 print('The quick brown fox jumps'.truncate(15, endString: '…')); // The quick brow…
+print('hello world'.truncate(2)); // ..
+print('😀😀😀😀😀'.truncate(7)); // 😀😀...
+```
+
+`first(length)` and `last(length)` follow the same rule:
+
+```dart
+print('😀abc'.first(1).isEmpty); // true
+print('😀abc'.first(2)); // 😀
+print('😀abc'.first(3)); // 😀a
+print('abc😀'.last(2)); // 😀
 ```
 
 ### Count the words in a string in Dart?
@@ -146,39 +173,70 @@ print('a👍🏽b'.reverse()); // b👍🏽a
 
 ### Escape and unescape HTML in Dart?
 
-`escapeHtml()` replaces `<`, `>`, `&`, `"`, `'` and `` ` `` with entities. `unescapeHtml()` reverses it.
+`escapeHtml()` replaces `<`, `>`, `&`, `"`, `'` and `` ` `` with entities. `unescapeHtml()` reverses it in a single pass, so an escaped entity is decoded only once.
 
 ```dart
 print('<a href="x">Tom & Jerry</a>'.escapeHtml()); // &lt;a href=&quot;x&quot;&gt;Tom &amp; Jerry&lt;/a&gt;
 print('&lt;p&gt;Tom &amp; Jerry&lt;/p&gt;'.unescapeHtml()); // <p>Tom & Jerry</p>
+print('&amp;quot;'.unescapeHtml()); // &quot;
+```
+
+### Escape a string for use in a RegExp in Dart?
+
+`escapeRegExp()` puts a backslash before each regular expression syntax character (`\ ^ $ . * + ? ( ) [ ] { } |`), so the result matches the original text literally. It works in default and `unicode: true` mode, outside a character class. `unescapeRegExp()` is its inverse.
+
+```dart
+print('a.b (1+1)'.escapeRegExp()); // a\.b \(1\+1\)
+print(RegExp('a.b'.escapeRegExp()).hasMatch('axb')); // false
+print(RegExp('a.b'.escapeRegExp()).hasMatch('a.b')); // true
+print(r'a\.b'.unescapeRegExp()); // a.b
 ```
 
 ### Capitalize, decapitalize or swap the case of a string in Dart?
 
+`capitalize()` and `decapitalize()` change the first grapheme cluster, so a leading emoji or accented letter with a combining mark is never split. If the first character is already uppercase, `capitalize()` lowercases the rest (`HELLO` becomes `Hello`); otherwise it keeps the rest as is (`macBook` becomes `MacBook`).
+
 ```dart
 print('hello'.capitalize()); // Hello
 print('hello'.capitalize(capitalizeAll: true)); // HELLO
+print('HELLO'.capitalize()); // Hello
+print('macBook'.capitalize()); // MacBook
 print('Hello'.decapitalize()); // hello
 print('Hello World'.swapCase()); // hELLO wORLD
 ```
 
 ### Insert text into a string at a position in Dart?
 
+Positions are UTF-16 code units. If a position falls inside an emoji or other grapheme cluster, the text goes before that cluster.
+
 ```dart
 print('hllo'.insert('e', 1)); // hello
+print('a😀b'.insert('X', 2)); // aX😀b
+```
+
+### Replace part of a string by position in Dart?
+
+`splice(deleteCount, startPosition, replacement)` deletes `deleteCount` characters from `startPosition` and puts `replacement` there. A `deleteCount` that runs past the end deletes to the end, and a deleted range is widened to whole grapheme clusters.
+
+```dart
+print('sting like a bee'.splice(4, 6, 'as')); // sting as a bee
+print('hello'.splice(99, 1, 'X')); // hX
+print('a😀b'.splice(1, 2, 'X')); // aXb
 ```
 
 ### Replace several substrings at once in Dart?
 
-`translate()` replaces each map key with its value.
+`translate()` replaces each map key with its value in a single pass over the original string. Replaced text is not translated again, the longest matching key wins at each position, and empty keys are ignored.
 
 ```dart
 print('Hello world'.translate({'ell': 'ipp'})); // Hippo world
+print('ab'.translate({'a': 'b', 'b': 'c'})); // bc
+print('abc'.translate({'a': 'X', 'ab': 'Y'})); // Yc
 ```
 
 ## Things to know
 
-- **Grapheme-aware members.** `countGrapheme`, `graphemes`, `graphemeAt` and `reverse` work on graphemes (user-perceived characters). Other members index by UTF-16 code unit, as `String.length` does, so check the results on text with emoji or combining marks.
+- **Grapheme-aware members.** `countGrapheme`, `graphemes`, `graphemeAt` and `reverse` count and index by grapheme (user-perceived character). `first`, `last`, `truncate`, `prune`, `insert`, `splice`, `capitalize` and `decapitalize` take lengths and indices in UTF-16 code units, as `String.length` does, but never split a grapheme cluster: a cut that would fall inside an emoji or a letter with combining marks moves to the nearest cluster boundary, so results never exceed the requested length. Text where every grapheme is one code unit behaves exactly as plain `substring` would.
 - **Word splitting.** The case-conversion methods, `words()` and `countWords()` use a regular expression that understands upper and lower case Latin letters (including accented ones), digits and punctuation. Text that is only in the Latin-1 range uses a Latin-specific pattern; other text uses a general Unicode pattern.
 - **Extension methods.** Members live in extensions named `Case`, `Chop`, `Count`, `Escape`, `Manipulate`, `Words`, `Strings`, `Surrogates` and `ExtendedIterable`. If another package defines a clashing method, import only what you need, for example `import 'package:stringr/stringr.dart' show Case;`, or use `hide`.
 
@@ -193,9 +251,9 @@ All members below are extension members on `String` unless noted. The source is 
 | `camelCase({bool preserveAcronym = false})` | `String` | Converts to camelCase. With `preserveAcronym: true`, an all-uppercase first word stays uppercase. |
 | `snakeCase()` | `String` | Converts to snake_case. |
 | `kebabCase()` | `String` | Converts to kebab-case. |
-| `titleCase()` | `String` | Capitalizes the first letter of each word. |
-| `capitalize({bool capitalizeAll = false})` | `String` | Uppercases the first character. With `capitalizeAll: true`, uppercases the whole string. |
-| `decapitalize({bool decapitalizeAll = false})` | `String` | Lowercases the first character. With `decapitalizeAll: true`, lowercases the whole string. |
+| `titleCase()` | `String` | Capitalizes the first letter of each word. Contraction endings after an apostrophe (`s`, `t`, `d`, `m`, `ll`, `re`, `ve`) are lowercased: `it's` becomes `It's`. |
+| `capitalize({bool capitalizeAll = false})` | `String` | Uppercases the first grapheme. If it was already uppercase, the rest is lowercased, otherwise the rest is kept. With `capitalizeAll: true`, uppercases the whole string. |
+| `decapitalize({bool decapitalizeAll = false})` | `String` | Lowercases the first grapheme. With `decapitalizeAll: true`, lowercases the whole string. |
 | `swapCase()` | `String` | Converts uppercase letters to lowercase and lowercase letters to uppercase. |
 | `toCamelCase` | `String` (getter) | Same as `camelCase()`. |
 | `toSnakeCase` | `String` (getter) | Same as `snakeCase()`. |
@@ -207,11 +265,11 @@ All members below are extension members on `String` unless noted. The source is 
 
 | Member | Returns | Description |
 |---|---|---|
-| `first(int length)` | `String` | The first `length` characters, or the whole string if it is shorter. |
-| `last(int length)` | `String` | The last `length` characters, or the whole string if it is shorter. |
+| `first(int length)` | `String` | The first `length` UTF-16 code units, or the whole string if it is shorter. Never splits a grapheme cluster, so it can return fewer. A negative `length` returns an empty string. |
+| `last(int length)` | `String` | The last `length` UTF-16 code units, or the whole string if it is shorter. Never splits a grapheme cluster. A negative `length` returns an empty string. |
 | `slice(int start, [int? end])` | `String` | Substring from `start` to `end` (to the end of the string if omitted). |
-| `truncate(int truncateLength, {String endString = "..."})` | `String` | Shortens to `truncateLength` characters in total, ending with `endString`. Returns the string unchanged if it already fits. |
-| `prune(int pruneLength)` | `String` | Shortens to at most `pruneLength` characters, cutting at the last whitespace before that point where there is one. No ending string is added. |
+| `truncate(int truncateLength, {String endString = "..."})` | `String` | Shortens to at most `truncateLength` UTF-16 code units in total, ending with `endString`, without splitting a grapheme cluster. Returns the string unchanged if it already fits. Never throws: if `truncateLength` is smaller than `endString`, returns `endString` cut to `truncateLength`. |
+| `prune(int pruneLength)` | `String` | Shortens to at most `pruneLength` UTF-16 code units, cutting at the last whitespace before that point where there is one and never splitting a grapheme cluster. No ending string is added. |
 | `codePointAt(int index)` | `int` | Unicode code point at the UTF-16 `index`, combining a surrogate pair into one value. |
 | `graphemeAt(int index)` | `String` | The grapheme (user-perceived character) at `index`. |
 
@@ -229,26 +287,26 @@ All members below are extension members on `String` unless noted. The source is 
 | Member | Returns | Description |
 |---|---|---|
 | `escapeHtml()` | `String` | Replaces `<`, `>`, `&`, `"`, `'` and `` ` `` with HTML entities. |
-| `unescapeHtml()` | `String` | Replaces the entities for those characters (plus `&#39;` and `&apos;`) with the characters. |
-| `escapeRegExp()` | `String` | Escapes RegExp special characters. |
-| `unescapeRegExp()` | `String` | Removes backslash escape sequences. |
+| `unescapeHtml()` | `String` | Replaces the entities for those characters (plus `&#39;` and `&apos;`) with the characters, in a single pass (`&amp;quot;` becomes `&quot;`). |
+| `escapeRegExp()` | `String` | Puts a backslash before each RegExp syntax character (`\ ^ $ . * + ? ( ) [ ] { }` and `\|`), so `RegExp(s.escapeRegExp())` matches `s` literally in default and unicode mode. For use outside a character class. |
+| `unescapeRegExp()` | `String` | The inverse of `escapeRegExp()`: removes one backslash from each backslash pair (`\.` becomes `.`, `\\` becomes `\`). |
 
 ### Manipulate (`extension Manipulate on String`)
 
 | Member | Returns | Description |
 |---|---|---|
-| `insert(String toInsert, int position)` | `String` | Inserts `toInsert` at `position`. Returns the string unchanged if `position` is out of range or `toInsert` is empty. |
-| `latinize()` | `String` | Replaces accented and some non-Latin letters with Latin letters and drops combining diacritical marks. |
+| `insert(String toInsert, int position)` | `String` | Inserts `toInsert` at the UTF-16 `position`; inside a grapheme cluster it goes before that cluster. Returns the string unchanged if `position` is out of range or `toInsert` is empty. |
+| `latinize()` | `String` | Replaces accented and some non-Latin letters with Latin letters and drops combining diacritical marks. `ß` becomes `ss` and `ẞ` becomes `SS`. |
 | `reverse()` | `String` | Reverses the string by grapheme. |
 | `slugify()` | `String` | Latinizes, replaces characters other than `A-Z`, `a-z` and `0-9` with hyphens, then applies `kebabCase()`, so it also splits at case changes and between letters and digits (`'JavaScript'` becomes `java-script`). |
-| `splice(int deleteCount, int startPosition, String replacement)` | `String` | Deletes `deleteCount` characters from `startPosition` and puts `replacement` there. Note the argument order. |
-| `translate(Map<String, String> translations)` | `String` | Replaces every occurrence of each map key with its value. |
+| `splice(int deleteCount, int startPosition, String replacement)` | `String` | Deletes `deleteCount` UTF-16 code units from `startPosition` and puts `replacement` there. The range is widened to whole grapheme clusters, and a `deleteCount` past the end deletes to the end. Note the argument order. |
+| `translate(Map<String, String> translations)` | `String` | Replaces the map keys with their values in a single pass over the original string, so replacements do not cascade. The longest matching key wins; empty keys are ignored. |
 
 ### Split (`extension Words on String`)
 
 | Member | Returns | Description |
 |---|---|---|
-| `words({Pattern pattern = ""})` | `List<String>` | Splits into words on case changes, digits and punctuation. A non-empty `pattern` replaces the default word pattern. |
+| `words({Pattern pattern = ""})` | `List<String>` | Splits into words on case changes, digits and punctuation. A non-empty `pattern` (a `String` regular expression or a `RegExp`) replaces the default word pattern. |
 | `graphemes()` | `List<String>` | The graphemes of the string as a list. |
 
 ### Util
@@ -263,7 +321,7 @@ All members below are extension members on `String` unless noted. The source is 
 | `getAstralNumberFromSurrogatePair(int highSurrogate, int lowSurrogate)` | `int` | Top-level function. Combines a surrogate pair into one code point. |
 | `Iterable<E>.mapIndex<T>(T Function(E e, int i) f)` (`extension ExtendedIterable`) | `Iterable<T>` | Like `map`, with the index as the second argument. |
 | `Iterable<E>.forEachIndex(void Function(E e, int i) f)` (`extension ExtendedIterable`) | `void` | Like `forEach`, with the index as the second argument. |
-| `diacritics` | `Map<String, String>` | Top-level variable. Maps each replacement (such as `'e'` or `'sh'`) to a string of the characters that `latinize()` replaces with it. |
+| `diacritics` | `Map<String, String>` | Top-level variable. Maps each replacement (such as `'e'`, `'sh'` or `'ss'`) to a string of the characters that `latinize()` replaces with it. |
 | `diacriticsMap` | `Map<String, String>` | Top-level variable. Exported, empty by default and not read by `latinize()`. |
 | `replaceCodeUnits(List<int> codeUnits)` | `List<int>` | Top-level function. The code-unit replacement step used by `latinize()`. |
 

@@ -156,6 +156,24 @@ void main() {
           (_) => characters[random.nextInt(characters.length)]).join();
       expect(text.titleCase(), reference(text), reason: 'text "$text"');
     }
+
+    // Apostrophes that do not follow a letter behave like any punctuation.
+    final afterLetter = RegExp("\\p{L}\\p{M}*['\u2019]", unicode: true);
+    const withApostrophes = "abcXYZ 019'\u2019-é\u0301😀";
+    final apostropheCharacters = withApostrophes.characters.toList();
+    var compared = 0;
+    for (var i = 0; i < 5000; i++) {
+      final text = List.generate(
+          random.nextInt(16),
+          (_) => apostropheCharacters[
+              random.nextInt(apostropheCharacters.length)]).join();
+      if (afterLetter.hasMatch(text)) {
+        continue;
+      }
+      compared++;
+      expect(text.titleCase(), reference(text), reason: 'text "$text"');
+    }
+    expect(compared, greaterThan(500));
   });
 
   test("the string should be converted to uppercase", () {
