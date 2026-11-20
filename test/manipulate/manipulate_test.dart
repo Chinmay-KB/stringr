@@ -53,4 +53,58 @@ void main() {
     expect("help".translate({"elp": "ola"}), "hola");
     expect("I am groot".translate({"I": "Me", "groot": "Yoda"}), "Me am Yoda");
   });
+
+  test("translate replaces in a single pass without cascading", () {
+    expect('ab'.translate({'a': 'b', 'b': 'c'}), 'bc');
+    expect('abc'.translate({'a': 'b', 'b': 'a'}), 'bac');
+    expect('aaa'.translate({'a': 'aa'}), 'aaaaaa');
+  });
+
+  test("translate prefers the longest key at a position", () {
+    expect('abc'.translate({'a': 'X', 'ab': 'Y'}), 'Yc');
+    expect('abc'.translate({'ab': 'Y', 'a': 'X'}), 'Yc');
+    expect('abcd'.translate({'a': '1', 'abc': '3', 'ab': '2'}), '3d');
+  });
+
+  test("translate ignores empty keys and treats keys literally", () {
+    expect('abc'.translate({'': 'X'}), 'abc');
+    expect('abc'.translate({'': 'X', 'b': 'B'}), 'aBc');
+    expect(''.translate({'a': 'b'}), '');
+    expect('abc'.translate({}), 'abc');
+    expect('a.c abc'.translate({'.': '!'}), 'a!c abc');
+    expect(
+        r'1+1 (a)'.translate({'+': 'plus', '(': '[', ')': ']'}), '1plus1 [a]');
+  });
+
+  test("latinize converts sharp s to ss", () {
+    expect('straße'.latinize(), 'strasse');
+    expect('Straße'.latinize(), 'Strasse');
+    expect('STRAßE'.latinize(), 'STRAssE');
+    expect('\u1E9E'.latinize(), 'SS');
+    expect('café'.latinize(), 'cafe');
+    expect('Hello, World 123'.latinize(), 'Hello, World 123');
+    expect(''.latinize(), '');
+    expect('straße'.slugify(), 'strasse');
+  });
+
+  test("insert never splits a grapheme cluster", () {
+    expect('a😀b'.insert('X', 1), 'aX😀b');
+    expect('a😀b'.insert('X', 2), 'aX😀b');
+    expect('a😀b'.insert('X', 3), 'a😀Xb');
+    expect('e\u0301a'.insert('X', 1), 'Xe\u0301a');
+    expect('a\r\nb'.insert('X', 2), 'aX\r\nb');
+    expect('👨‍👩‍👧'.insert('X', 4), 'X👨‍👩‍👧');
+  });
+
+  test("splice never splits a grapheme cluster", () {
+    // splice(deleteCount, startPosition, replacement)
+    expect('a😀b'.splice(0, 2, 'X'), 'aX😀b');
+    expect('a😀b'.splice(1, 1, 'X'), 'aXb');
+    expect('a😀b'.splice(1, 2, 'X'), 'aXb');
+    expect('a😀b'.splice(2, 1, 'X'), 'aXb');
+    expect('a😀b'.splice(1, 3, 'X'), 'a😀X');
+    expect('a😀b'.splice(3, 1, 'X'), 'aX');
+    expect('e\u0301a'.splice(1, 1, 'X'), 'Xa');
+    expect('a😀b'.splice(0, -100, 'X'), 'Xa😀b');
+  });
 }

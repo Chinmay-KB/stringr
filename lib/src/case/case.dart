@@ -1,7 +1,11 @@
 import 'package:stringr/src/split/words.dart';
 import 'package:stringr/src/util/object/extended_iterable.dart';
 import 'package:stringr/src/util/regex/const_regex.dart';
+import 'package:stringr/src/util/strings/grapheme_boundary.dart';
 import 'package:stringr/src/util/strings/strings.dart';
+
+const _apostrophes = {"'", '\u2019'};
+final _letter = RegExp(r'\p{L}', unicode: true);
 
 /// Extension bundling all functionalities related to case manipulation
 extension Case on String {
@@ -24,26 +28,48 @@ extension Case on String {
 
   /// Capitalizes the first character of the string
   ///
+  /// The "first character" is the first grapheme cluster, so a leading
+  /// surrogate pair or a base letter with combining marks is never split.
+  ///
+  /// If the first character is already uppercase (or has no case, like a
+  /// digit) the rest of the string is lowercased (`HELLO` becomes `Hello`);
+  /// otherwise the rest of the string is kept as is (`macBook` becomes
+  /// `MacBook`).
+  ///
   /// If [capitalizeAll] is set to `true`, the whole string is converted to
   /// uppercase. It is set to `false` by default
-  String capitalize({bool capitalizeAll = false}) => switch (capitalizeAll) {
-        true => toUpperCase(),
-        false => isEmpty
-            ? ''
-            : this[0] == this[0].toUpperCase()
-                ? this[0].toUpperCase() + substring(1).toLowerCase()
-                : this[0].toUpperCase() + substring(1),
-      };
+  String capitalize({bool capitalizeAll = false}) {
+    if (capitalizeAll) {
+      return toUpperCase();
+    }
+    if (isEmpty) {
+      return '';
+    }
+    final end = graphemeCeil(this, 1);
+    final head = substring(0, end);
+    final upperHead = head.toUpperCase();
+    return head == upperHead
+        ? upperHead + substring(end).toLowerCase()
+        : upperHead + substring(end);
+  }
 
   /// Decapitalizes the first character of the string
   ///
+  /// The "first character" is the first grapheme cluster, so a leading
+  /// surrogate pair or a base letter with combining marks is never split.
+  ///
   /// If [decapitalizeAll] is set to `true`, the whole string is converted to
   /// lowercase. It is set to `false` by default
-  String decapitalize({bool decapitalizeAll = false}) =>
-      switch (decapitalizeAll) {
-        true => toLowerCase(),
-        false => isEmpty ? '' : this[0].toLowerCase() + substring(1),
-      };
+  String decapitalize({bool decapitalizeAll = false}) {
+    if (decapitalizeAll) {
+      return toLowerCase();
+    }
+    if (isEmpty) {
+      return '';
+    }
+    final end = graphemeCeil(this, 1);
+    return substring(0, end).toLowerCase() + substring(end);
+  }
 
   /// Converts a string to kebab-case
   String kebabCase() =>
@@ -74,13 +100,19 @@ extension Case on String {
   }
 
   /// Capitalizes the first letter of each word
-  String titleCase() {
-    final wordsRegExp = RegExp(regexpExtendedAscii).hasMatch(this)
-        ? regexpLatinWord
-        : regexpWord;
-    return replaceAllMapped(
-        RegExp(wordsRegExp), (match) => match.group(0)!.capitalize());
-  }
+  ///
+  /// An apostrophe (`'` or `\u2019`) between two letters does not start a new
+  /// word, so `it's` becomes `It's` and not `It'S`. Hyphens still do:
+  /// `dog-friendly` becomes `Dog-Friendly`.
+  String titleCase() => replaceAllMapped(defaultWordRegExp(this), (match) {
+        final start = match.start;
+        if (start >= 2 &&
+            _apostrophes.contains(this[start - 1]) &&
+            _letter.hasMatch(this[start - 2])) {
+          return match.group(0)!;
+        }
+        return match.group(0)!.capitalize();
+      });
 
   // Convenience getters for common case conversions
 

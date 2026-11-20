@@ -33,6 +33,23 @@ void main() {
     expect("".capitalize(), "");
   });
 
+  test("capitalize and decapitalize never split a surrogate pair or grapheme",
+      () {
+    // Deseret small letter long i (astral, has an uppercase form)
+    expect("\u{10428}abc".capitalize(), "\u{10400}abc");
+    expect("\u{10400}ABC".decapitalize(), "\u{10428}ABC");
+    expect("\u{10400}ABC".capitalize(), "\u{10400}abc");
+    expect("😀abc".capitalize(), "😀abc");
+    expect("😀ABC".capitalize(), "😀abc");
+    expect("😀ABC".decapitalize(), "😀ABC");
+    expect("e\u0301abc".capitalize(), "E\u0301abc");
+    expect("E\u0301ABC".decapitalize(), "e\u0301ABC");
+    expect("\u{10428}".capitalize(), "\u{10400}");
+    expect("é".capitalize(), "É");
+    expect("a".capitalize(), "A");
+    expect("A".decapitalize(), "a");
+  });
+
   test(
       "the first character of the string should be converted to lowercase. "
       "If decapitalizeAll is set to true, then all characters are converted to "
@@ -84,6 +101,15 @@ void main() {
     expect("and you will be".titleCase(), "And You Will Be");
     expect("1n a world".titleCase(), "1N A World");
     expect("/home/Kb/code/stringr".titleCase(), "/Home/Kb/Code/Stringr");
+  });
+
+  test("titleCase keeps apostrophes inside a word", () {
+    expect("it's a dog-friendly café".titleCase(), "It's A Dog-Friendly Café");
+    expect("it\u2019s a dog".titleCase(), "It\u2019s A Dog");
+    expect("don't STOP believin'".titleCase(), "Don't Stop Believin'");
+    expect("o'brien's pub".titleCase(), "O'brien's Pub");
+    expect("rock 'n' roll".titleCase(), "Rock 'N' Roll");
+    expect("dog-friendly".titleCase(), "Dog-Friendly");
   });
 
   test("the string should be converted to uppercase", () {

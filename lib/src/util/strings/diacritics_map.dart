@@ -55,7 +55,7 @@ final diacritics = {
   'p': '\x70\u01a5\u03c0\u043f',
   'q': '\x71\u024b',
   'r': '\x72\u0155\u0157\u0159\u0211\u0213\u024d\u027d\u03c1\u0440',
-  's': '\x73\xdf\u015b\u015d\u015f\u0161\u0219\u023f\u03c2\u03c3\u0441',
+  's': '\x73\u015b\u015d\u015f\u0161\u0219\u023f\u03c2\u03c3\u0441',
   't': '\x74\u0163\u0165\u0167\u01ad\u021b\u0288\u03c4\u0442',
   'u':
       '\x75\xf9\xfa\xfb\xfc\u0169\u016b\u016d\u016f\u0171\u0173\u01b0\u01d4\u01d6\u01d8\u01da\u01dc\u0215\u0217\u0289\u0443\u044a',
@@ -64,6 +64,8 @@ final diacritics = {
   'x': '\x78\u03c7',
   'y': '\x79\xfd\xff\u0177\u01b4\u0233\u024f\u03b0\u03c5\u03cb\u03cd\u044b',
   'z': '\x7a\u017a\u017c\u017e\u01b6\u0225\u0240\u03b6\u0437',
+  'SS': '\u1e9e',
+  'ss': '\xdf',
   'OE': '\x8c\u0152',
   'oe': '\x9c\u0153',
   'AE': '\xc6\u01e2\u01fc',
