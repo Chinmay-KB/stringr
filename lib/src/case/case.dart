@@ -3,9 +3,33 @@ import 'package:stringr/src/util/object/extended_iterable.dart';
 import 'package:stringr/src/util/regex/const_regex.dart';
 import 'package:stringr/src/util/strings/grapheme_boundary.dart';
 import 'package:stringr/src/util/strings/strings.dart';
+import 'package:stringr/src/util/strings/surrogate_pair.dart';
 
 const _apostrophes = {"'", '\u2019'};
+const _contractionSuffixes = {'s', 't', 'd', 'm', 'll', 're', 've'};
 final _letter = RegExp(r'\p{L}', unicode: true);
+final _mark = RegExp(r'\p{M}', unicode: true);
+
+/// Whether the text before [end] ends with a letter, optionally followed by
+/// combining marks. Handles astral (surrogate pair) letters.
+bool _endsWithLetter(String text, int end) {
+  var index = end;
+  while (index > 0) {
+    var start = index - 1;
+    if (start > 0 &&
+        text.codeUnitAt(start).isLowSurrogate() &&
+        text.codeUnitAt(start - 1).isHighSurrogate()) {
+      start--;
+    }
+    final character = text.substring(start, index);
+    if (_mark.hasMatch(character)) {
+      index = start;
+      continue;
+    }
+    return _letter.hasMatch(character);
+  }
+  return false;
+}
 
 /// Extension bundling all functionalities related to case manipulation
 extension Case on String {
@@ -101,17 +125,23 @@ extension Case on String {
 
   /// Capitalizes the first letter of each word
   ///
-  /// An apostrophe (`'` or `\u2019`) between two letters does not start a new
-  /// word, so `it's` becomes `It's` and not `It'S`. Hyphens still do:
-  /// `dog-friendly` becomes `Dog-Friendly`.
+  /// A word that directly follows an apostrophe (`'` or `\u2019`) which itself
+  /// directly follows a letter is treated as a contraction suffix when it is,
+  /// ignoring case, one of `s`, `t`, `d`, `m`, `ll`, `re` or `ve`. Such a
+  /// suffix is lowercased instead of capitalized: `it's` and `IT'S` become
+  /// `It's`, `we'll` becomes `We'll`. Every other apostrophe is treated like
+  /// any other punctuation, so `o'neil` becomes `O'Neil` and `l'été` becomes
+  /// `L'Été`.
   String titleCase() => replaceAllMapped(defaultWordRegExp(this), (match) {
+        final word = match.group(0)!;
         final start = match.start;
         if (start >= 2 &&
             _apostrophes.contains(this[start - 1]) &&
-            _letter.hasMatch(this[start - 2])) {
-          return match.group(0)!;
+            _contractionSuffixes.contains(word.toLowerCase()) &&
+            _endsWithLetter(this, start - 1)) {
+          return word.toLowerCase();
         }
-        return match.group(0)!.capitalize();
+        return word.capitalize();
       });
 
   // Convenience getters for common case conversions

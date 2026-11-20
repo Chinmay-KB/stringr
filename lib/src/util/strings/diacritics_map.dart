@@ -141,6 +141,41 @@ Map<int, List<int>> _buildMultipleUnit() {
   return result;
 }
 
+/// Whether the lookup tables leave every ASCII code unit unchanged.
+///
+/// Decided once, from the tables [replaceCodeUnits] actually uses, so it stays
+/// exact even if the exported [diacritics] map was extended with ASCII sources
+/// before the tables were built.
+late final bool _asciiUnchanged = _computeAsciiUnchanged();
+
+bool _computeAsciiUnchanged() {
+  for (var unit = 0; unit < 0x80; unit++) {
+    final single = _singleUnit[unit];
+    if (single != null && single != unit) {
+      return false;
+    }
+    if (_multipleUnit.containsKey(unit)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/// Whether [text] is guaranteed to be returned unchanged by
+/// [replaceCodeUnits]: it only holds ASCII and no ASCII code unit has a
+/// replacement.
+bool isUnchangedByReplacement(String text) {
+  if (text.isEmpty) {
+    return false;
+  }
+  for (var i = 0; i < text.length; i++) {
+    if (text.codeUnitAt(i) >= 0x80) {
+      return false;
+    }
+  }
+  return _asciiUnchanged;
+}
+
 // ignore: public_member_api_docs
 List<int> replaceCodeUnits(List<int> codeUnits) {
   final finalString = <int>[];

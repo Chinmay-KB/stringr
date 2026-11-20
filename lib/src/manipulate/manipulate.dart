@@ -25,15 +25,9 @@ extension Manipulate on String {
   ///
   /// Diacritics are removed and non Latin letters are transliterated, for
   /// example `café` becomes `cafe` and `straße` becomes `strasse`.
-  String latinize() {
-    for (var i = 0; i < length; i++) {
-      if (codeUnitAt(i) >= 0x80) {
-        return String.fromCharCodes(replaceCodeUnits(codeUnits));
-      }
-    }
-    // Pure ASCII text has no replacements.
-    return this;
-  }
+  String latinize() => isUnchangedByReplacement(this)
+      ? this
+      : String.fromCharCodes(replaceCodeUnits(codeUnits));
 
   /// Reverses a string. Works with strings containing graphemes
   String reverse() => characters.split(''.characters).toList().reversed.join();
@@ -52,6 +46,8 @@ extension Manipulate on String {
   /// is widened to cover every cluster it touches, so deleting half a
   /// surrogate pair deletes the whole pair. With a [deleteCount] of zero the
   /// replacement is inserted before the cluster containing [startPosition].
+  /// A [deleteCount] that runs past the end of the string deletes up to the
+  /// end and never throws.
   String splice(int deleteCount, int startPosition, String replacement) {
     if (startPosition < 0) {
       startPosition = length + startPosition;
@@ -63,6 +59,10 @@ extension Manipulate on String {
     }
     if (deleteCount < 0) {
       deleteCount = 0;
+    } else if (deleteCount > length - startPosition) {
+      // Deleting past the end deletes to the end. Clamping first also keeps
+      // `startPosition + deleteCount` from overflowing.
+      deleteCount = length - startPosition;
     }
     final start = graphemeFloor(this, startPosition);
     final end = deleteCount == 0

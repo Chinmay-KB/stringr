@@ -46,11 +46,13 @@ extension Escape on String {
 
   /// Return the RegExp escaped version of a string
   ///
-  /// Every regular expression special character gets a single leading
+  /// Every regular expression syntax character gets a single leading
   /// backslash, so `RegExp(text.escapeRegExp())` matches `text` literally:
   /// `'a.b'.escapeRegExp()` is `a\.b`. The escaped characters are
-  /// `- [ ] { } ( ) * + ! < = : ? . \ ^ $ | # ,`. The result is meant for
-  /// Dart's default (non unicode) `RegExp` mode.
+  /// `\ ^ $ . * + ? ( ) [ ] { } |`. Other characters, including `-`, are left
+  /// alone, so the result compiles and matches literally both in default mode
+  /// and with `RegExp(..., unicode: true)`. It is meant for use outside a
+  /// character class (`[...]`).
   String escapeRegExp() =>
       replaceAllMapped(regexpSpecialCharacters, (match) => '\\${match[0]}');
 

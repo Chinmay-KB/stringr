@@ -46,7 +46,7 @@ final regexpTrimRight = RegExp('[$whitespace]+\$');
 final regexpDigit = RegExp('^$digit+\$');
 
 /// Regular expression to match regular expression special characters
-final regexpSpecialCharacters = RegExp(r"[-\[\]{}()*+!<=:?.\\^$|#,]");
+final regexpSpecialCharacters = RegExp(r"[\\^$.*+?()\[\]{}|]");
 
 /// Regular expression to match not latin characters
 const regexpNonLatin = "[^A-Za-z0-9]";

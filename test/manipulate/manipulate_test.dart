@@ -107,4 +107,23 @@ void main() {
     expect('e\u0301a'.splice(1, 1, 'X'), 'Xa');
     expect('a😀b'.splice(0, -100, 'X'), 'Xa😀b');
   });
+
+  test("splice clamps deleteCount to the end of the string", () {
+    const huge = 0x7FFFFFFFFFFFFFFF;
+    expect('hello'.splice(huge, 1, 'X'), 'hX');
+    expect('hello'.splice(huge, 0, 'X'), 'X');
+    expect('hello'.splice(99, 0, 'X'), 'X');
+    expect('hello'.splice(99, 5, 'X'), 'helloX');
+    expect('hello'.splice(99, 4, 'X'), 'hellX');
+    expect('hello'.splice(5, 3, 'X'), 'helX');
+    expect('hello'.splice(huge, -huge, 'X'), 'X');
+    expect('hello'.splice(huge, 1 << 62, 'X'), 'helloX');
+    expect('a😀b'.splice(huge, 1, 'X'), 'aX');
+    expect('a😀b'.splice(huge, 2, 'X'), 'aX');
+    expect('a😀b'.splice(huge, 3, 'X'), 'a😀X');
+    expect('😀😀'.splice(huge, 2, 'X'), '😀X');
+    expect('😀😀'.splice(huge, 0, 'X'), 'X');
+    expect(''.splice(huge, 0, 'X'), 'X');
+    expect(''.splice(3, 2, 'X'), 'X');
+  });
 }
