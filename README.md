@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/Chinmay-KB/stringr/branch/master/graph/badge.svg?token=UIWY4OF2TE)](https://codecov.io/gh/Chinmay-KB/stringr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Chinmay-KB/stringr/blob/master/LICENSE)
 
-stringr is a Dart and Flutter package of `String` extension methods for case conversion (camelCase, snake_case, kebab-case, Title Case), URL slugs, removing diacritics, truncation, counting, word splitting and HTML escaping. It is for developers who need these operations to work on accented, non-Latin and emoji text, not only plain ASCII. It is inspired by [VocaJS](https://vocajs.com/).
+stringr is a Dart and Flutter package of `String` extension methods for case conversion (camelCase, snake_case, kebab-case, Title Case), URL slugs, removing diacritics, truncation, counting, word splitting and HTML escaping. It is for developers who need word splitting, case conversion and diacritic removal to work on accented and non-Latin text, and character counting and reversing to work on emoji, not only on plain ASCII. It is inspired by [VocaJS](https://vocajs.com/).
 
 ## Install
 
@@ -73,13 +73,15 @@ print('Hello, world! 2infinity&beyond'.words()); // [Hello, world, 2, infinity, 
 
 ### Create a URL slug from a string in Dart?
 
-`slugify()` removes diacritics, replaces anything that is not a letter or digit with a hyphen, and lowercases the result.
+`slugify()` removes diacritics, replaces anything that is not a letter or digit with a hyphen, and lowercases the result. Because it ends with `kebabCase()`, it also splits at case changes and between letters and digits, so `'JavaScript'` becomes `java-script`.
 
 ```dart
 print('Hello World!'.slugify()); // hello-world
 print('Crème Brûlée & Café au Lait'.slugify()); // creme-brulee-cafe-au-lait
 print('  Dart: 10 Tips & Tricks!  '.slugify()); // dart-10-tips-tricks
 print('Привет мир'.slugify()); // privet-mir
+print('JavaScript'.slugify()); // java-script
+print('abc123def'.slugify()); // abc-123-def
 ```
 
 ### Remove accents and diacritics from a string in Dart (latinize)?
@@ -168,7 +170,7 @@ print('hllo'.insert('e', 1)); // hello
 
 ### Replace several substrings at once in Dart?
 
-`translate()` applies each map entry in order.
+`translate()` replaces each map key with its value.
 
 ```dart
 print('Hello world'.translate({'ell': 'ipp'})); // Hippo world
@@ -176,9 +178,9 @@ print('Hello world'.translate({'ell': 'ipp'})); // Hippo world
 
 ## Things to know
 
-- **Grapheme-aware members.** `countGrapheme`, `graphemes`, `graphemeAt` and `reverse` work on graphemes (user-perceived characters). In version 1.2.2 the other index-based members (`first`, `last`, `slice`, `truncate`, `prune`, `insert`, `splice`, `codePointAt`) count UTF-16 code units, so on text with emoji or combining marks they can cut in the middle of a character.
+- **Grapheme-aware members.** `countGrapheme`, `graphemes`, `graphemeAt` and `reverse` work on graphemes (user-perceived characters). Other members index by UTF-16 code unit, as `String.length` does, so check the results on text with emoji or combining marks.
 - **Word splitting.** The case-conversion methods, `words()` and `countWords()` use a regular expression that understands upper and lower case Latin letters (including accented ones), digits and punctuation. Text that is only in the Latin-1 range uses a Latin-specific pattern; other text uses a general Unicode pattern.
-- **Extension methods.** Members live in extensions named `Case`, `Chop`, `Count`, `Escape`, `Manipulate`, `Words`, `Strings`, `Surrogates` and `ExtendedIterable`. If another package defines a clashing method, use `import 'package:stringr/stringr.dart' show Case;` or `hide` to choose.
+- **Extension methods.** Members live in extensions named `Case`, `Chop`, `Count`, `Escape`, `Manipulate`, `Words`, `Strings`, `Surrogates` and `ExtendedIterable`. If another package defines a clashing method, import only what you need, for example `import 'package:stringr/stringr.dart' show Case;`, or use `hide`.
 
 ## API reference
 
@@ -238,9 +240,9 @@ All members below are extension members on `String` unless noted. The source is 
 | `insert(String toInsert, int position)` | `String` | Inserts `toInsert` at `position`. Returns the string unchanged if `position` is out of range or `toInsert` is empty. |
 | `latinize()` | `String` | Replaces accented and some non-Latin letters with Latin letters and drops combining diacritical marks. |
 | `reverse()` | `String` | Reverses the string by grapheme. |
-| `slugify()` | `String` | Latinizes, replaces runs of characters other than `A-Z`, `a-z` and `0-9` with hyphens, and lowercases. |
+| `slugify()` | `String` | Latinizes, replaces characters other than `A-Z`, `a-z` and `0-9` with hyphens, then applies `kebabCase()`, so it also splits at case changes and between letters and digits (`'JavaScript'` becomes `java-script`). |
 | `splice(int deleteCount, int startPosition, String replacement)` | `String` | Deletes `deleteCount` characters from `startPosition` and puts `replacement` there. Note the argument order. |
-| `translate(Map<String, String> translations)` | `String` | Replaces every occurrence of each map key with its value, applying entries in map order. |
+| `translate(Map<String, String> translations)` | `String` | Replaces every occurrence of each map key with its value. |
 
 ### Split (`extension Words on String`)
 
