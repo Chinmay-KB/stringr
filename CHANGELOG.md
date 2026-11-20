@@ -29,6 +29,7 @@ Correctness release. The public API is unchanged (no member was removed, renamed
 
 ### Tests
 * Added regression tests for every fix above
+* Added fixture-backed Unicode regression tests for combining marks, emoji grapheme clusters, Devanagari and Arabic word boundaries, dotted `İ`, eszett and acronym-heavy identifiers
 
 ## [1.2.2] - 2026
 
