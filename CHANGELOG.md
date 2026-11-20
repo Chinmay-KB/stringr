@@ -1,3 +1,27 @@
+## [1.3.0] - 2026
+
+### Behaviour changes
+* `escapeRegExp()` now prefixes special characters with a single backslash, so `'a.b'.escapeRegExp()` is `a\.b` and `RegExp(text.escapeRegExp())` matches `text` literally. It previously produced two backslashes (`a\\.b`), which never matched
+* `unescapeRegExp()` (and the deprecated `unEscapeRegExp()`) is now the true inverse of `escapeRegExp()`: `\.` becomes `.` and `\\` becomes `\`. It previously stripped every backslash
+* `translate()` now replaces in a single pass, so replacements no longer cascade (`'ab'.translate({'a': 'b', 'b': 'c'})` is `bc`, not `cc`). When several keys match at the same position the longest key wins, and empty keys are ignored
+* `unescapeHtml()` now decodes in a single pass, so `&amp;quot;` becomes `&quot;` instead of `"`
+* `latinize()` now maps `ß` to `ss` and `ẞ` to `SS` (it previously dropped one `s`: `straße` gave `strase`). `slugify()` benefits too. All other mappings are unchanged
+* `truncate()` no longer throws when `truncateLength` is shorter than `endString`; it returns `endString` clipped to `truncateLength` (`'hello world'.truncate(2)` is `..`)
+* `first()`, `last()`, `truncate()`, `prune()`, `insert()` and `splice()` never split a grapheme cluster (surrogate pairs, combining marks, ZWJ emoji, `\r\n`). Lengths and indices stay UTF-16 code unit based; a cut that would fall inside a cluster moves to the nearest cluster boundary that keeps the result within the requested length. Results for text where every grapheme is one code unit are unchanged. A negative length now returns an empty string instead of throwing
+* `capitalize()` and `decapitalize()` operate on the first grapheme cluster instead of the first code unit. The `HELLO` to `Hello` versus `macBook` to `MacBook` rules are unchanged
+
+### Bug Fixes
+* `words()` now accepts both `String` and `RegExp` patterns (`'a-b c'.words(pattern: RegExp(r'\w+'))` was `[]`). The default behaviour is unchanged
+* `titleCase()` keeps apostrophes inside a word: `it's` becomes `It's` instead of `It'S`
+
+### Performance
+* The default word regular expressions used by `words()`, `titleCase()` and the case conversions are compiled once instead of on every call
+* `latinize()` returns pure ASCII strings as is, without allocating
+* Added a `benchmark/` script (excluded from the published package)
+
+### Tests
+* Added regression tests for every fix above
+
 ## [1.2.2] - 2026
 
 ### Bug Fixes
