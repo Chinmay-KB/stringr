@@ -3,36 +3,32 @@
 import 'package:stringr/stringr.dart';
 
 void main() {
-  // Case transformations
-  print('camelCase: "XMLHttpRequest" -> "${"XMLHttpRequest".camelCase()}"');
-  print(
-      'camelCase: "/home/Kb/code/stringr" -> "${"/home/Kb/code/stringr".camelCase()}"');
-  print('capitalize: "яблоко" -> "${"яблоко".capitalize()}"');
-  print('kebabCase: "XMLHttpRequest" -> "${"XMLHttpRequest".kebabCase()}"');
-  print('snakeCase: "XMLHttpRequest" -> "${"XMLHttpRequest".snakeCase()}"');
-  print('titleCase: "hello world" -> "${"hello world".titleCase()}"');
-  print('');
+  // Case conversion
+  print('XMLHttpRequest'.camelCase()); // xmlHttpRequest
+  print('XMLHttpRequest'.snakeCase()); // xml_http_request
+  print('XMLHttpRequest'.kebabCase()); // xml-http-request
+  print('hello world'.titleCase()); // Hello World
+  print('hello world'.toPascalCase); // HelloWorld
 
-  // Chop operations
-  print(
-      'codePointAt: "\\uD835\\uDC00\\uD835\\uDC01" at 2 -> "${"\uD835\uDC00\uD835\uDC01".codePointAt(2)}"');
-  print(
-      'graphemeAt: complex string at 3 -> "${"foo\uD834\uDF06\u0303\u035C\u035D\u035Ebar".graphemeAt(3)}"');
-  print('prune: "Привет как дела" to 10 -> "${"Привет как дела".prune(10)}"');
-  print(
-      'truncate: "Is this where you wanna go" to 10 -> "${"Is this where you wanna go".truncate(10)}"');
-  print('first: "hello" first 3 -> "${"hello".first(3)}"');
-  print('last: "hello" last 3 -> "${"hello".last(3)}"');
-  print('');
+  // URL slugs and diacritics
+  print('Crème Brûlée & Café au Lait'.slugify()); // creme-brulee-cafe-au-lait
+  print('anglikonų šiurkščios'.latinize()); // anglikonu siurkscios
 
-  // Count operations
-  print('count: "hello" -> ${"hello".count()}');
-  print('countWords: "hello world foo" -> ${"hello world foo".countWords()}');
-  print('countGrapheme: "café" -> ${"café".countGrapheme()}');
-  print('');
+  // Truncation
+  print('The quick brown fox jumps'.prune(15)); // The quick brown
+  print('The quick brown fox jumps'.truncate(15)); // The quick br...
 
-  // Manipulate operations
-  print('reverse: "hello" -> "${"hello".reverse()}"');
-  print('slugify: "Hello World" -> "${"Hello World".slugify()}"');
-  print('latinize: "café" -> "${"café".latinize()}"');
+  // Counting and splitting
+  print('Hello, how are you today?'.countWords()); // 5
+  print('foo_bar-baz qux'.words()); // [foo, bar, baz, qux]
+  print('banana'.countOccurrences('a')); // 3
+
+  // Grapheme-aware operations
+  print('café'.length); // 5 (UTF-16 code units)
+  print('café'.countGrapheme()); // 4 (user-perceived characters)
+  print('ab👨‍👩‍👧‍👦c'.reverse()); // c👨‍👩‍👧‍👦ba
+
+  // HTML escaping
+  print('<a href="x">Tom & Jerry</a>'.escapeHtml());
+  // &lt;a href=&quot;x&quot;&gt;Tom &amp; Jerry&lt;/a&gt;
 }
