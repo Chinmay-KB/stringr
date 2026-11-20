@@ -39,3 +39,23 @@ final regexpAlphaDigit = RegExp(
 
 /// Regular expression to match Extended ASCII characters, i.e. the first 255
 const regexpExtendedAscii = r'^[\x01-\xFF]*$';
+
+/// Compiled [regexpLatinWord]
+final latinWordRegExp = RegExp(regexpLatinWord);
+
+/// Compiled [regexpWord]
+final unicodeWordRegExp = RegExp(regexpWord);
+
+/// Returns the default word-matching regular expression best suited for
+/// [text]: the cheaper Latin-1 one if every code unit is in `\x01-\xFF`
+/// (the same test as [regexpExtendedAscii], without running a regex), the
+/// full Unicode one otherwise.
+RegExp defaultWordRegExp(String text) {
+  for (var i = 0; i < text.length; i++) {
+    final unit = text.codeUnitAt(i);
+    if (unit == 0 || unit > 0xFF) {
+      return unicodeWordRegExp;
+    }
+  }
+  return latinWordRegExp;
+}
